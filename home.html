@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strumento Tecnico di Analisi Eliche - Calibrato</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --panel-soft:#f8fbff;
+      --text:#162033;
+      --muted:#60708f;
+      --line:#d7e1ef;
+      --line-strong:#b9c9df;
+      --accent:#1f78ff;
+      --accent2:#ffb020;
+      --green:#1f9d5a;
+      --red:#d94a4a;
+      --violet:#7c55d8;
+      --teal:#0f9fb7;
+      --card:#ffffff;
+      --shadow:0 10px 30px rgba(25,48,89,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,Segoe UI,Arial,sans-serif;
+      background:linear-gradient(180deg,#f8fbff,#eef4fb);
+      color:var(--text);
+    }
+    .wrap{max-width:100%; width:100%; margin:0 auto; padding:20px 24px}
+    h1,h2,h3{margin:0 0 10px}
+    h1{font-size:30px}
+    h2{font-size:22px;color:#1c5fd4}
+    h3{font-size:16px;color:#2356a7}
+    p,li{line-height:1.5}
+    .sub{color:var(--muted);margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:520px minmax(0,1fr); gap:20px}
+    .left,.right{display:grid; gap:18px; min-width:0}
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+    .inputs .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    .inputs .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+    input,select,textarea,button{
+      width:100%;
+      border-radius:11px;
+      border:1px solid var(--line-strong);
+      background:#fff;
+      color:var(--text);
+      padding:10px 12px;
+      font-size:14px;
+    }
+    textarea{
+      min-height:140px;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      resize:vertical;
+    }
+    button{
+      cursor:pointer;
+      background:linear-gradient(180deg,#2f87ff,#1f6ee8);
+      color:#fff;
+      border-color:#2a72dc;
+      font-weight:700;
+    }
+    button.secondary{
+      background:#fff;
+      color:#1d4f9c;
+      border-color:#bdd0ea;
+    }
+    button.good{
+      background:linear-gradient(180deg,#22a861,#17824a);
+      border-color:#1f8a52;
+    }
+    .btnrow4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px}
+    .card{
+      min-width:0;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+    .metric{font-size:24px;font-weight:800; line-height:1.1; word-break:break-word}
+    .small{font-size:12px;color:var(--muted)}
+    .good{color:var(--green)} .warn{color:var(--accent2)} .bad{color:var(--red)} .violet{color:var(--violet)} .teal{color:var(--teal)}
+    .table-wrap{overflow-x:auto; overflow-y:auto; max-width:100%}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:8px 10px;border-bottom:1px solid #e5edf7;text-align:right}
+    th{color:#315180;background:#f4f8fd;position:sticky;top:0}
+    td:first-child,th:first-child{text-align:left}
+    .charts{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    .chartPanel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+    .chartHead{display:flex;justify-content:space-between;gap:10px;align-items:end;margin-bottom:8px}
+    svg{
+      width:100%;
+      height:320px;
+      background:#fcfdff;
+      border-radius:12px;
+      border:1px solid #dbe6f4;
+    }
+    .report{
+      white-space:pre-wrap;
+      background:var(--panel-soft);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px;
+      color:#22314b;
+    }
+    .formula{
+      font-family:ui-monospace,monospace;
+      background:#f7fbff;
+      border:1px solid var(--line);
+      padding:10px;
+      border-radius:10px;
+      margin:8px 0;
+      color:#23395d;
+    }
+    .pill{
+      display:inline-block;
+      padding:4px 9px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      border:1px solid #cfe0f7;
+      background:#f7fbff;
+      color:#2f5d9b;
+    }
+    .hint{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid #d8e6f8;
+      background:#f7fbff;
+      color:#315179;
+      font-size:13px;
+    }
+    .footer{margin-top:12px;color:var(--muted);font-size:12px}
+    @media (max-width:1500px){
+      .grid{grid-template-columns:1fr}
+      .cards{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+      .charts{grid-template-columns:1fr}
+    }
+
+    @media (max-width:900px){
+      .wrap{padding:14px}
+      .inputs .row,
+      .inputs .row3{
+        grid-template-columns:1fr;
+      }
+      .cards{
+        grid-template-columns:1fr;
+      }
+    }
+    @media print{
+      body{background:#fff}
+      .wrap{max-width:none;padding:0}
+      .no-print{display:none !important}
+      .panel,.chartPanel,.card{box-shadow:none}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="no-print">
+    <h1>Strumento Tecnico di Analisi Eliche</h1>
+    <div class="sub">Versione a tema chiaro con <strong>calibrazione reale da thrust stand</strong>. Puoi usare stime ingegneristiche generiche oppure calibrare il modello con dati misurati dei tuoi test al banco su motore, ESC, batteria ed elica.</div>
+  </div>
+
+  <div class="grid">
+    <div class="left no-print">
+      <div class="panel inputs">
+        <h2>1. Dati di ingresso</h2>
+        <div class="row">
+          <div><label>Diametro elica (pollici)</label><input id="diameterIn" type="number" step="0.01" value="5.1"></div>
+          <div><label>Raggio totale (mm)</label><input id="radiusMm" type="number" step="0.01" value="64.26"></div>
+        </div>
+        <div class="row">
+          <div><label>Numero pale</label><input id="bladeCount" type="number" step="1" value="3"></div>
+          <div><label>Peso elica stimato (g)</label><input id="propWeight" type="number" step="0.1" value="4.0"></div>
+        </div>
+        <div class="row">
+          <div><label>KV motore</label><input id="kv" type="number" step="1" value="2050"></div>
+          <div><label>Celle batteria (S)</label><input id="cells" type="number" step="1" value="6"></div>
+        </div>
+        <div class="row">
+          <div><label>Tensione nominale per cella (V)</label><input id="vNomCell" type="number" step="0.01" value="3.7"></div>
+          <div><label>Tensione a piena carica per cella (V)</label><input id="vFullCell" type="number" step="0.01" value="4.2"></div>
+        </div>
+        <div class="row">
+          <div><label>Fattore RPM sotto carico (0–1)</label><input id="loadedRpmFactor" type="number" step="0.01" value="0.60"></div>
+          <div><label>Fattore stima corrente</label><input id="currentFactor" type="number" step="0.01" value="1.00"></div>
+        </div>
+        <div class="row">
+          <div><label>Camber factor (-1 a +1)</label><input id="camberFactor" type="number" step="0.05" value="0.00"></div>
+          <div><label>Sweep factor (0 a 1)</label><input id="sweepFactor" type="number" step="0.05" value="0.00"></div>
+        </div>
+        <div class="row">
+          <div><label>Angolo di droop pala (gradi)</label><input id="droopAngleDeg" type="number" step="0.1" value="0.0"></div>
+          <div><label>Convenzione</label><input type="text" value="Negativo = punta più bassa del mozzo" readonly></div>
+        </div>
+        <div>
+          <label>Sezioni misurate della pala (una per riga: raggio_mm, angolo_gradi)</label>
+          <textarea id="sections">56.23,17.9
+48.20,21.4
+40.17,24.0
+32.13,25.5
+24.23,30.5
+16.07,32.0</textarea>
+        </div>
+        <div>
+          <label>Distribuzione corda opzionale (una per riga: %raggio, corda_mm)</label>
+          <textarea id="chords">25,3.0
+37.7,5.5
+50,7.8
+62.5,9.6
+75,10.2
+87.5,8.6</textarea>
+        </div>
+        <div class="btnrow4" style="margin-top:10px">
+          <button onclick="runAnalysis()">Esegui analisi</button>
+          <button class="secondary" onclick="loadExample()">Ricarica esempio</button>
+          <button class="good" onclick="window.print()">Stampa / Salva PDF</button>
+          <button class="secondary" onclick="downloadCSV()">Esporta CSV</button>
+        </div>
+      </div>
+
+      <div class="panel inputs">
+        <h2>2. Calibrazione thrust stand</h2>
+        <div class="hint">Incolla i dati reali del banco prova relativi all'hardware esatto in test. Formato: <strong>RPM,corrente_A,spinta_gf[,tensione_V]</strong>. Il tool calcola i fattori di calibrazione e li applica alle curve stimate.</div>
+        <div class="row3" style="margin-top:10px">
+          <div>
+            <label>Modalità calibrazione</label>
+            <select id="calMode">
+              <option value="off">Off</option>
+              <option value="single">Fattore singolo</option>
+              <option value="curve" selected>Interpolazione curva</option>
+            </select>
+          </div>
+          <div>
+            <label>Variabile di ancoraggio</label>
+            <select id="calAnchor">
+              <option value="rpm" selected>RPM</option>
+              <option value="current">Corrente</option>
+            </select>
+          </div>
+          <div>
+            <label>Blend di smoothing (0–1)</label>
+            <input id="calBlend" type="number" step="0.05" value="1.00">
+          </div>
+        </div>
+        <div>
+          <label>Dati reali thrust stand</label>
+          <textarea id="thrustStandData">10000,9.2,560,24.8
+15000,17.8,1010,24.2
+20000,31.5,1410,23.7
+25000,48.0,1870,23.0
+28000,61.5,2160,22.6
+30000,70.5,2340,22.3</textarea>
+        </div>
+        <div class="row">
+          <div>
+            <label>Usa la tensione misurata quando presente</label>
+            <select id="useMeasuredVoltage">
+              <option value="yes" selected>Sì</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          <div>
+            <label>Fallback se manca la potenza misurata</label>
+            <select id="calPowerFallback">
+              <option value="nominal">Usa stima nominale sotto carico</option>
+              <option value="full">Usa stima a tensione piena</option>
+            </select>
+          </div>
+        </div>
+        <div class="btnrow4" style="margin-top:10px">
+          <button onclick="runAnalysis()">Applica calibrazione</button>
+          <button class="secondary" onclick="loadCalibrationExample()">Carica dati esempio banco</button>
+          <button class="secondary" onclick="clearCalibration()">Azzera calibrazione</button>
+          <button class="secondary" onclick="downloadCalibrationCSV()">Esporta tabella calibrazione</button>
+        </div>
+      </div>
+
+
+      <div class="panel">
+        <h2>4. Come impostare camber, sweep, droop e solidity</h2>
+        <div class="hint"><strong>Camber factor</strong>, <strong>sweep factor</strong> e <strong>angolo di droop</strong> sono descrittori semplificati utili a migliorare la previsione quando non hai a disposizione i dati completi del profilo aerodinamico.</div>
+        <p><span class="pill">Camber factor</span> descrive se la parte posteriore della sezione è più <strong>positiva</strong> (camber classico, più spinta/bite, più drag/corrente) oppure più <strong>negativa/reflex</strong> (più pulita in alta velocità, meno bite, meno spike di corrente).</p>
+        <ul>
+          <li><strong>-1.0 a -0.5</strong>: reflex evidente / retro negativo</li>
+          <li><strong>-0.4 a -0.1</strong>: leggermente reflex / retro scarico</li>
+          <li><strong>0.0</strong>: neutro / non noto</li>
+          <li><strong>+0.1 a +0.4</strong>: camber positivo moderato</li>
+          <li><strong>+0.5 a +1.0</strong>: retro molto carico / camber marcato</li>
+        </ul>
+        <p><strong>Come stimarlo su un'elica esistente:</strong> osserva una sezione a ~60–75% del raggio, traccia la linea di corda tra bordo d'attacco e bordo d'uscita e valuta la linea media della sezione.</p>
+        <ul>
+          <li>se la metà posteriore curva <strong>sopra</strong> la corda in modo classico, usa un valore <strong>positivo</strong></li>
+          <li>se la metà posteriore tende ad appiattirsi o tornare verso la corda / lato opposto, usa un valore <strong>negativo</strong></li>
+        </ul>
+        <p><span class="pill">Sweep factor</span> descrive quanto la pala sia <strong>sciabolata</strong> invece che dritta. Influisce su stabilità, comportamento di punta, ritardo di stallo e aggressività statica.</p>
+        <ul>
+          <li><strong>0.0</strong>: pala quasi dritta</li>
+          <li><strong>0.2–0.4</strong>: sweep leggero</li>
+          <li><strong>0.5–0.7</strong>: sweep chiaramente visibile / sciabola</li>
+          <li><strong>0.8–1.0</strong>: sweep estremo</li>
+        </ul>
+        <p><strong>Come stimare lo sweep su un'elica esistente:</strong> guarda la pala in pianta e segui la quarter-chord line o la linea media della pala. Curvatura lieve = ~0.2–0.4, forma a sciabola evidente = ~0.5–0.8.</p>
+        <p><span class="pill">Angolo di droop</span> descrive quanto la pala, vista lateralmente, scenda o salga rispetto al piano di rotazione.</p>
+        <ul>
+          <li><strong>0°</strong>: pala neutra / complanare</li>
+          <li><strong>-1° a -2°</strong>: droop leggero</li>
+          <li><strong>-3° a -5°</strong>: droop evidente</li>
+          <li><strong>&lt; -6°</strong>: droop molto marcato</li>
+          <li><strong>+1° a +3°</strong>: dihedral positivo</li>
+        </ul>
+        <p><strong>Come misurarlo su un'elica esistente:</strong> in vista laterale, traccia il piano di rotazione e poi una linea media della pala tra circa 40%R e 80%R. L'angolo tra questa linea e il piano orizzontale è il droop. Valori negativi indicano punta più bassa del mozzo.</p>
+        <p><span class="pill">Solidity</span> viene calcolata automaticamente da numero di pale, raggio e corda media:</p>
+        <div class="formula">σ ≈ (N · c̄) / (π · R)</div>
+        <p>dove <strong>N</strong> è il numero di pale, <strong>c̄</strong> è la corda media e <strong>R</strong> è il raggio. Solidity alta tende a voler dire più grip e più corrente; solidity bassa tende a voler dire meno drag e più efficienza.</p>
+      </div>
+
+      <div class="panel">
+        <h2>3. Modello di calcolo</h2>
+        <div class="formula">Local pitch at radius r:
+P(r) = 2 · π · r · tan(β)</div>
+        <div class="formula">No-load motor speed:
+RPM<sub>no-load</sub> = KV · V</div>
+        <div class="formula">Loaded speed estimate:
+RPM<sub>loaded</sub> ≈ RPM<sub>no-load</sub> · loaded RPM factor</div>
+        <div class="formula">Calibration factors from real thrust stand:
+K<sub>T</sub> = T<sub>real</sub> / T<sub>model</sub>,
+K<sub>I</sub> = I<sub>real</sub> / I<sub>model</sub></div>
+        <div class="formula">In curve mode, the tool interpolates K<sub>T</sub> and K<sub>I</sub> across RPM or current and applies them to every estimated point.</div>
+        <p class="small">This means the model can start from generic propeller physics and then be corrected with your own measured hardware behavior. Once calibrated, thrust/current estimates become much more representative of your exact motor, ESC, battery and prop combination.</p>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="cards">
+        <div class="card"><div class="small">Pitch equivalente al 75%R</div><div class="metric warn" id="mPitch75">–</div><div class="small" id="mPitch75mm">–</div></div>
+        <div class="card"><div class="small">RPM a vuoto a piena carica</div><div class="metric good" id="mRpmNoLoad">–</div><div class="small" id="mRpmLoaded">–</div></div>
+        <div class="card"><div class="small">Corrente stimata al 100% throttle</div><div class="metric bad" id="mCorrente">–</div><div class="small" id="mPower">–</div></div>
+        <div class="card"><div class="small">Spinta stimata per motore</div><div class="metric violet" id="mThrust">–</div><div class="small" id="mThrustAmp">–</div></div>
+        <div class="card"><div class="small">Solidity automatica σ</div><div class="metric teal" id="mSolidity">–</div><div class="small" id="mGeomBias">–</div></div>
+        <div class="card"><div class="small">Stato calibrazione</div><div class="metric teal" id="mCalStatus">Off</div><div class="small" id="mCalSummary">Solo modello generico</div></div>
+      </div>
+
+      <div class="panel">
+        <h2>4. Geometria e risultati sezioni</h2>
+        <div class="table-wrap"><table id="sectionsTable"></table></div>
+      </div>
+
+      <div class="panel">
+        <h2>5. Tabella calibrazione</h2>
+        <div class="table-wrap"><table id="calTable"></table></div>
+      </div>
+
+      <div class="charts">
+        <div class="chartPanel">
+          <div class="chartHead"><h3>Pitch locale vs % raggio [in]</h3><div class="small">Andamento geometrico del carico pala (X: % raggio, Y: pitch [in])</div></div>
+          <svg id="chartPitch"></svg>
+        </div>
+        <div class="chartPanel">
+          <div class="chartHead"><h3>Angolo pala β vs % raggio [deg]</h3><div class="small">Progressione del twist (X: % raggio, Y: angolo pala [deg])</div></div>
+          <svg id="chartAngle"></svg>
+        </div>
+        <div class="chartPanel">
+          <div class="chartHead"><h3>Thrust vs RPM [gf vs RPM]</h3><div class="small">Modello vs calibrato (assi con unità ingegneristiche)</div></div>
+          <svg id="chartThrustRpm"></svg>
+        </div>
+        <div class="chartPanel">
+          <div class="chartHead"><h3>Thrust vs Corrente [gf vs A]</h3><div class="small">Modello vs calibrato (assi con unità ingegneristiche)</div></div>
+          <svg id="chartThrustCurrent"></svg>
+        </div>
+        <div class="chartPanel">
+          <div class="chartHead"><h3>Efficienza vs RPM [gf/W vs RPM]</h3><div class="small">Indicatore gf/W (X: RPM, Y: efficienza [gf/W])</div></div>
+          <svg id="chartEff"></svg>
+        </div>
+        <div class="chartPanel">
+          <div class="chartHead"><h3>Relative Blade Loading vs % Radius [-]</h3><div class="small">Solo indicativo (X: % raggio, Y: carico relativo [-])</div></div>
+          <svg id="chartLoad"></svg>
+        </div>
+        <div class="chartPanel">
+          <div class="chartHead"><h3>Calibration Factor Kt vs Anchor [-]</h3><div class="small">Rapporto spinta reale/modello (Y: Kt [-])</div></div>
+          <svg id="chartKt"></svg>
+        </div>
+        <div class="chartPanel">
+          <div class="chartHead"><h3>Calibration Factor Ki vs Anchor [-]</h3><div class="small">Rapporto corrente reale/modello (Y: Ki [-])</div></div>
+          <svg id="chartKi"></svg>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>6. Interpretazione tecnica</h2>
+        <div id="report" class="report"></div>
+        <div class="footer">Use the browser print function to save a complete PDF. The calibration section can be fed with your own thrust-stand CSV-like data to adapt the model to your exact hardware.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function mmToIn(mm){ return mm / 25.4; }
+function inToMm(i){ return i * 25.4; }
+function fmt(n, d=2){ return Number(n).toLocaleString(undefined,{minimumFractionDigits:d, maximumFractionDigits:d}); }
+function fmt0(n){ return Math.round(n).toLocaleString(); }
+function parseLines(text, expected=2){
+  return text.trim().split(/\n+/)
+    .map(line => line.split(/[,\t; ]+/).map(v=>v.trim()).filter(Boolean))
+    .filter(a=>a.length>=expected)
+    .map(a=>a.map(Number))
+    .filter(a=>a.slice(0,expected).every(v=>!isNaN(v)));
+}
+function interpolateAt(x, arr, xKey='pctR', yKey='pitchIn'){
+  const data = [...arr].sort((a,b)=>a[xKey]-b[xKey]);
+  if(!data.length) return 1;
+  if (x <= data[0][xKey]) return data[0][yKey];
+  if (x >= data[data.length-1][xKey]) return data[data.length-1][yKey];
+  for(let i=0;i<data.length-1;i++){
+    const a=data[i], b=data[i+1];
+    if(x>=a[xKey] && x<=b[xKey]){
+      const t=(x-a[xKey])/(b[xKey]-a[xKey]);
+      return a[yKey] + t*(b[yKey]-a[yKey]);
+    }
+  }
+  return data[data.length-1][yKey];
+}
+function drawChart(svgId, series, opts={}){
+  const svg = document.getElementById(svgId);
+  const width = svg.clientWidth || 640;
+  const height = svg.clientHeight || 320;
+  svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  const margin = {l:56, r:18, t:16, b:38};
+  const plotW = width - margin.l - margin.r;
+  const plotH = height - margin.t - margin.b;
+  const xMin = opts.xMin ?? Math.min(...series.flatMap(s=>s.data.map(p=>p.x)));
+  const xMax = opts.xMax ?? Math.max(...series.flatMap(s=>s.data.map(p=>p.x)));
+  const yMinRaw = opts.yMin ?? Math.min(...series.flatMap(s=>s.data.map(p=>p.y)));
+  const yMaxRaw = opts.yMax ?? Math.max(...series.flatMap(s=>s.data.map(p=>p.y)));
+  const yPad = (yMaxRaw - yMinRaw || 1)*0.12;
+  const yMin = opts.yMin ?? Math.max(0, yMinRaw - yPad);
+  const yMax = opts.yMax ?? yMaxRaw + yPad;
+  const sx = x => margin.l + ((x-xMin)/(xMax-xMin || 1))*plotW;
+  const sy = y => margin.t + plotH - ((y-yMin)/(yMax-yMin || 1))*plotH;
+
+  let out = '';
+  out += `<rect x="0" y="0" width="${width}" height="${height}" fill="#fcfdff"/>`;
+
+  const xTicks = opts.xTicks ?? 5, yTicks = opts.yTicks ?? 5;
+  for(let i=0;i<=xTicks;i++){
+    const x = xMin + i*(xMax-xMin)/xTicks;
+    const px = sx(x);
+    out += `<line x1="${px}" y1="${margin.t}" x2="${px}" y2="${margin.t+plotH}" stroke="#e3ecf7" stroke-width="1"/>`;
+    out += `<text x="${px}" y="${height-12}" fill="#5e7597" font-size="11" text-anchor="middle">${opts.xFmt ? opts.xFmt(x) : Math.round(x)}</text>`;
+  }
+  for(let i=0;i<=yTicks;i++){
+    const y = yMin + i*(yMax-yMin)/yTicks;
+    const py = sy(y);
+    out += `<line x1="${margin.l}" y1="${py}" x2="${margin.l+plotW}" y2="${py}" stroke="#e3ecf7" stroke-width="1"/>`;
+    out += `<text x="${margin.l-8}" y="${py+4}" fill="#5e7597" font-size="11" text-anchor="end">${opts.yFmt ? opts.yFmt(y) : Math.round(y)}</text>`;
+  }
+  out += `<line x1="${margin.l}" y1="${margin.t}" x2="${margin.l}" y2="${margin.t+plotH}" stroke="#7a95bc" stroke-width="1.4"/>`;
+  out += `<line x1="${margin.l}" y1="${margin.t+plotH}" x2="${margin.l+plotW}" y2="${margin.t+plotH}" stroke="#7a95bc" stroke-width="1.4"/>`;
+
+  series.forEach(s=>{
+    const path = s.data.map((p,i)=>`${i?'L':'M'} ${sx(p.x)} ${sy(p.y)}`).join(' ');
+    out += `<path d="${path}" fill="none" stroke="${s.color}" stroke-width="${s.stroke || 2.2}" stroke-dasharray="${s.dash || ''}"/>`;
+    s.data.forEach(p=>{
+      out += `<circle cx="${sx(p.x)}" cy="${sy(p.y)}" r="${s.pointRadius || 3.2}" fill="${s.color}"/>`;
+      if(s.labels){
+        out += `<text x="${sx(p.x)+6}" y="${sy(p.y)-8}" fill="${s.color}" font-size="11">${s.labels(p)}</text>`;
+      }
+    });
+  });
+  svg.innerHTML = out;
+}
+function getChordAt(pctR, chords){
+  if(!chords.length) return 1;
+  const data = [...chords].sort((a,b)=>a.pctR-b.pctR);
+  if(pctR <= data[0].pctR) return data[0].chord;
+  if(pctR >= data[data.length-1].pctR) return data[data.length-1].chord;
+  for(let i=0;i<data.length-1;i++){
+    const a=data[i], b=data[i+1];
+    if(pctR>=a.pctR && pctR<=b.pctR){
+      const t=(pctR-a.pctR)/(b.pctR-a.pctR);
+      return a.chord + t*(b.chord-a.chord);
+    }
+  }
+  return data[data.length-1].chord;
+}
+function nearestBy(arr, key, target){
+  let best = arr[0], bestd = Infinity;
+  arr.forEach(o=>{
+    const d = Math.abs(o[key]-target);
+    if(d<bestd){ bestd=d; best=o; }
+  });
+  return best;
+}
+function parseBenchData(){
+  const rows = parseLines(document.getElementById('thrustStandData').value, 3);
+  return rows.map(r => ({
+    rpm: r[0],
+    current: r[1],
+    thrust: r[2],
+    voltage: isNaN(r[3]) ? null : r[3]
+  })).filter(r => r.rpm>0 && r.current>0 && r.thrust>0).sort((a,b)=>a.rpm-b.rpm);
+}
+function calibrationLookupFactory(calPoints, key, valueName, fallback=1){
+  const data = [...calPoints].sort((a,b)=>a[key]-b[key]);
+  return function(x){
+    if(!data.length) return fallback;
+    if(x <= data[0][key]) return data[0][valueName];
+    if(x >= data[data.length-1][key]) return data[data.length-1][valueName];
+    for(let i=0;i<data.length-1;i++){
+      const a=data[i], b=data[i+1];
+      if(x>=a[key] && x<=b[key]){
+        const t=(x-a[key])/(b[key]-a[key]);
+        return a[valueName] + t*(b[valueName]-a[valueName]);
+      }
+    }
+    return fallback;
+  }
+}
+function loadExample(){
+  document.getElementById('diameterIn').value = 5.1;
+  document.getElementById('radiusMm').value = 64.26;
+  document.getElementById('bladeCount').value = 3;
+  document.getElementById('propWeight').value = 4.0;
+  document.getElementById('kv').value = 2050;
+  document.getElementById('cells').value = 6;
+  document.getElementById('vNomCell').value = 3.7;
+  document.getElementById('vFullCell').value = 4.2;
+  document.getElementById('loadedRpmFactor').value = 0.60;
+  document.getElementById('currentFactor').value = 1.00;
+  document.getElementById('camberFactor').value = 0.00;
+  document.getElementById('sweepFactor').value = 0.00;
+  document.getElementById('droopAngleDeg').value = 0.0;
+  document.getElementById('sections').value = `56.23,17.9
+48.20,21.4
+40.17,24.0
+32.13,25.5
+24.23,30.5
+16.07,32.0`;
+  document.getElementById('chords').value = `25,3.0
+37.7,5.5
+50,7.8
+62.5,9.6
+75,10.2
+87.5,8.6`;
+  loadCalibrationExample();
+  runAnalysis();
+}
+function loadCalibrationExample(){
+  document.getElementById('calMode').value = 'curve';
+  document.getElementById('calAnchor').value = 'rpm';
+  document.getElementById('calBlend').value = '1.00';
+  document.getElementById('thrustStandData').value = `10000,9.2,560,24.8
+15000,17.8,1010,24.2
+20000,31.5,1410,23.7
+25000,48.0,1870,23.0
+28000,61.5,2160,22.6
+30000,70.5,2340,22.3`;
+}
+function clearCalibration(){
+  document.getElementById('calMode').value = 'off';
+  document.getElementById('thrustStandData').value = '';
+  runAnalysis();
+}
+function downloadCSV(){
+  if(!window.__analysis) runAnalysis();
+  const a = window.__analysis;
+  let csv = "radius_mm,pct_radius,angle_deg,pitch_mm,pitch_in\n";
+  a.sections.forEach(s=> csv += `${s.r},${s.pctR},${s.beta},${s.pitchMm},${s.pitchIn}\n`);
+  csv += "\nRPM,model_current_A,cal_current_A,model_thrust_gf,cal_thrust_gf,model_power_W,cal_power_W,model_eff_gfW,cal_eff_gfW\n";
+  a.rpmPts.forEach((r,i)=> csv += `${r},${a.currentPts[i]},${a.currentPtsCal[i]},${a.thrustPts[i]},${a.thrustPtsCal[i]},${a.powerPts[i]},${a.powerPtsCal[i]},${a.effPts[i]},${a.effPtsCal[i]}\n`);
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'analisi_elica_export.csv';
+  link.click();
+  URL.revokeObjectURL(url);
+}
+function downloadCalibrationCSV(){
+  if(!window.__analysis) runAnalysis();
+  const a = window.__analysis;
+  let csv = "anchor,model_current_A,real_current_A,Ki,model_thrust_gf,real_thrust_gf,Kt,real_voltage_V\n";
+  a.calPoints.forEach(p=>{
+    csv += `${p.anchor},${p.modelCorrente},${p.realCorrente},${p.Ki},${p.modelThrust},${p.realThrust},${p.Kt},${p.realVoltage ?? ''}\n`;
+  });
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'tabella_calibrazione_elica.csv';
+  link.click();
+  URL.revokeObjectURL(url);
+}
+function runAnalysis(){
+  const diameterIn = parseFloat(document.getElementById('diameterIn').value);
+  const radiusMm = parseFloat(document.getElementById('radiusMm').value);
+  const bladeCount = parseFloat(document.getElementById('bladeCount').value);
+  const propWeight = parseFloat(document.getElementById('propWeight').value);
+  const kv = parseFloat(document.getElementById('kv').value);
+  const cells = parseFloat(document.getElementById('cells').value);
+  const vNom = parseFloat(document.getElementById('vNomCell').value) * cells;
+  const vFull = parseFloat(document.getElementById('vFullCell').value) * cells;
+  const loadedRpmFactor = parseFloat(document.getElementById('loadedRpmFactor').value);
+  const currentFactor = parseFloat(document.getElementById('currentFactor').value);
+  const camberFactor = Math.max(-1, Math.min(1, parseFloat(document.getElementById('camberFactor').value) || 0));
+  const sweepFactor = Math.max(0, Math.min(1, parseFloat(document.getElementById('sweepFactor').value) || 0));
+  const droopAngleDeg = parseFloat(document.getElementById('droopAngleDeg').value) || 0;
+  const droopNorm = Math.max(-1, Math.min(1, -droopAngleDeg / 6));
+
+  const calMode = document.getElementById('calMode').value;
+  const calAnchor = document.getElementById('calAnchor').value;
+  const calBlend = Math.max(0, Math.min(1, parseFloat(document.getElementById('calBlend').value) || 1));
+  const useMeasuredVoltage = document.getElementById('useMeasuredVoltage').value === 'yes';
+  const powerFallback = document.getElementById('calPowerFallback').value;
+
+  let sections = parseLines(document.getElementById('sections').value).map(([r,beta])=>{
+    const pitchMm = 2 * Math.PI * r * Math.tan(beta*Math.PI/180);
+    const pitchIn = mmToIn(pitchMm);
+    const pctR = 100 * r / radiusMm;
+    return {r, beta, pitchMm, pitchIn, pctR};
+  }).sort((a,b)=>a.r-b.r);
+
+  let chords = parseLines(document.getElementById('chords').value).map(([pctR,chord])=>({pctR, chord})).sort((a,b)=>a.pctR-b.pctR);
+
+  const pitch75 = interpolateAt(75, sections, 'pctR', 'pitchIn');
+  const pitch75mm = inToMm(pitch75);
+  const rpmNoLoadFull = kv * vFull;
+  const rpmLoadedFull = rpmNoLoadFull * loadedRpmFactor;
+
+  const outerBias = (interpolateAt(75, sections,'pctR','pitchIn') + interpolateAt(87.5, sections,'pctR','pitchIn')) / (2*Math.max(0.1, interpolateAt(37.7, sections,'pctR','pitchIn')));
+  const meanChord = chords.length ? chords.reduce((s,c)=>s+c.chord,0)/chords.length : 7.5;
+  const solidity = (bladeCount * meanChord) / (Math.PI * radiusMm);
+  const solidityNorm = solidity / 0.12; // around a representative 5" 3-blade reference
+  const chordFactor = chords.length ? Math.min(1.20, Math.max(0.80, meanChord / 8.0)) : 1.0;
+  const diameterFactor = Math.pow(diameterIn/5.1, 2.15);
+  const pitchFactor = Math.pow(pitch75/4.67, 1.20);
+  const bladeFactor = 0.88 + 0.12 * bladeCount;
+  const camberThrustFactor = 1 + 0.10 * camberFactor;
+  const camberCorrenteFactor = 1 + 0.12 * camberFactor;
+  const sweepThrustFactor = 1 - 0.05 * sweepFactor;
+  const sweepCorrenteFactor = 1 - 0.03 * sweepFactor;
+  const sweepEfficiencyFactor = 1 + 0.05 * sweepFactor;
+  const geometryIndex = diameterFactor * pitchFactor * chordFactor * Math.pow(solidityNorm, 0.22) * (0.78 + 0.22*Math.min(1.5, outerBias/1.25)) * (bladeFactor/1.24) * camberThrustFactor * sweepThrustFactor;
+
+  let currentTypical = 62 * geometryIndex * Math.pow(kv/2050,0.65) * Math.pow(vFull/25.2,1.10) * currentFactor * camberCorrenteFactor * sweepCorrenteFactor;
+  currentTypical = Math.max(15, currentTypical);
+  const currentPeak = currentTypical * 1.17;
+  const powerPerMotor = currentTypical * (vNom*0.92);
+
+  const rpmPts = [10000,15000,20000,25000,28000,30000,32000].filter(r=>r<=rpmNoLoadFull*0.85);
+  const thrustPts = rpmPts.map(r=>{
+    let base = (520 + (r-10000)*(2490-520)/(30000-10000));
+    base *= geometryIndex;
+    if(r>rpmLoadedFull*1.02) base *= Math.max(0.90, 1 - (r-rpmLoadedFull)/(rpmNoLoadFull));
+    base *= sweepEfficiencyFactor * (1 + 0.02 * droopNorm);
+    return base;
+  });
+  const currentPts = rpmPts.map(r=>Math.max(6, currentTypical * Math.pow(r/30000, 1.75)));
+  const powerPts = currentPts.map(i=>i*(vNom*0.92));
+  const effPts = thrustPts.map((t,i)=>t/powerPts[i]);
+
+  const loadPts = sections.map(s=>{
+    const chord = getChordAt(s.pctR, chords);
+    const rel = chord * s.pitchIn * (s.r / radiusMm);
+    return {x:s.pctR, y:rel};
+  });
+  const loadMax = Math.max(...loadPts.map(p=>p.y),1);
+  loadPts.forEach(p=>p.y /= loadMax);
+
+  // Calibration
+  const bench = parseBenchData();
+  let calPoints = [];
+  let thrustPtsCal = [...thrustPts];
+  let currentPtsCal = [...currentPts];
+  let powerPtsCal = [...powerPts];
+  let effPtsCal = [...effPts];
+  let calStatus = 'Off';
+  let calSummary = 'Solo modello generico';
+  let KtMean = 1, KiMean = 1;
+
+  if(calMode !== 'off' && bench.length){
+    calStatus = calMode === 'single' ? 'Single' : 'Curva';
+    const calRaw = bench.map(b=>{
+      const modelPoint = calAnchor === 'rpm'
+        ? {rpm:b.rpm, current: interpolateSeries(rpmPts, currentPts, b.rpm), thrust: interpolateSeries(rpmPts, thrustPts, b.rpm)}
+        : deriveModelAtCorrente(b.current, rpmPts, currentPts, thrustPts);
+      const anchor = calAnchor === 'rpm' ? b.rpm : b.current;
+      const modelCorrente = modelPoint.current;
+      const modelThrust = modelPoint.thrust;
+      const Kt = modelThrust > 0 ? b.thrust / modelThrust : 1;
+      const Ki = modelCorrente > 0 ? b.current / modelCorrente : 1;
+      return {
+        anchor,
+        modelCorrente,
+        realCorrente:b.current,
+        Ki,
+        modelThrust,
+        realThrust:b.thrust,
+        Kt,
+        realVoltage:b.voltage
+      };
+    });
+
+    KtMean = calRaw.reduce((s,p)=>s+p.Kt,0)/calRaw.length;
+    KiMean = calRaw.reduce((s,p)=>s+p.Ki,0)/calRaw.length;
+    calSummary = `Kt≈${fmt(KtMean,3)}, Ki≈${fmt(KiMean,3)} (${bench.length} bench points)`;
+
+    if(calMode === 'single'){
+      thrustPtsCal = thrustPts.map(t => t * (1 + (KtMean-1)*calBlend));
+      currentPtsCal = currentPts.map(i => i * (1 + (KiMean-1)*calBlend));
+    } else {
+      const ktFn = calibrationLookupFactory(calRaw, 'anchor', 'Kt', 1);
+      const kiFn = calibrationLookupFactory(calRaw, 'anchor', 'Ki', 1);
+      thrustPtsCal = thrustPts.map((t,idx)=>{
+        const anchorVal = calAnchor === 'rpm' ? rpmPts[idx] : currentPts[idx];
+        const k = 1 + (ktFn(anchorVal)-1)*calBlend;
+        return t * k;
+      });
+      currentPtsCal = currentPts.map((i,idx)=>{
+        const anchorVal = calAnchor === 'rpm' ? rpmPts[idx] : i;
+        const k = 1 + (kiFn(anchorVal)-1)*calBlend;
+        return i * k;
+      });
+    }
+
+    powerPtsCal = currentPtsCal.map((i, idx)=>{
+      if(useMeasuredVoltage){
+        const near = calAnchor === 'rpm'
+          ? nearestBy(calRaw, 'anchor', rpmPts[idx])
+          : nearestBy(calRaw, 'anchor', currentPtsCal[idx]);
+        if(near && near.realVoltage) return i * near.realVoltage;
+      }
+      return i * ((powerFallback === 'full') ? vFull : (vNom*0.92));
+    });
+    effPtsCal = thrustPtsCal.map((t,i)=>t/powerPtsCal[i]);
+    calPoints = calRaw;
+  }
+
+  // Metrics
+  const thrustAtLoaded = interpolateSeries(rpmPts, thrustPtsCal, rpmLoadedFull);
+  const thrustPerAmpAtTypical = thrustAtLoaded / interpolateSeries(rpmPts, currentPtsCal, rpmLoadedFull);
+  const currentAtLoaded = interpolateSeries(rpmPts, currentPtsCal, rpmLoadedFull);
+  const powerAtLoaded = interpolateSeries(rpmPts, powerPtsCal, rpmLoadedFull);
+
+  document.getElementById('mPitch75').textContent = `${fmt(pitch75,2)}"`;
+  document.getElementById('mPitch75mm').textContent = `${fmt(pitch75mm,2)} mm at 75%R`;
+  document.getElementById('mRpmNoLoad').textContent = fmt0(rpmNoLoadFull);
+  document.getElementById('mRpmLoaded').textContent = `Stima sotto carico: ${fmt0(rpmLoadedFull)} RPM`;
+  document.getElementById('mCorrente').textContent = `${fmt(currentAtLoaded,0)} A`;
+  document.getElementById('mPower').textContent = `~${fmt0(powerAtLoaded)} W / motore`;
+  document.getElementById('mThrust').textContent = `${fmt(thrustAtLoaded/1000,2)} kgf`;
+  document.getElementById('mThrustAmp').textContent = `${fmt(thrustPerAmpAtTypical,1)} gf/A in zona RPM sotto carico`;
+  document.getElementById('mSolidity').textContent = fmt(solidity,3);
+  document.getElementById('mGeomBias').textContent = `camber ${camberFactor>=0?'+':''}${fmt(camberFactor,2)} | sweep ${fmt(sweepFactor,2)} | droop ${fmt(droopAngleDeg,1)}°`;
+  document.getElementById('mCalStatus').textContent = calStatus;
+  document.getElementById('mCalSummary').textContent = calSummary;
+
+  const header = `<tr><th>Raggio (mm)</th><th>%R</th><th>β (gradi)</th><th>Pitch (mm)</th><th>Pitch (in)</th><th>Corda locale (mm)</th><th>Carico relativo pala</th></tr>`;
+  const rows = sections.slice().sort((a,b)=>b.r-a.r).map(s=>{
+    const chord = getChordAt(s.pctR, chords);
+    const rel = loadPts.find(p=>Math.abs(p.x-s.pctR)<1e-6)?.y ?? 0;
+    return `<tr><td>${fmt(s.r,2)}</td><td>${fmt(s.pctR,1)}%</td><td>${fmt(s.beta,1)}°</td><td>${fmt(s.pitchMm,2)}</td><td>${fmt(s.pitchIn,2)}"</td><td>${fmt(chord,2)}</td><td>${fmt(rel,3)}</td></tr>`;
+  }).join('');
+  document.getElementById('sectionsTable').innerHTML = header + rows;
+
+  const calHeader = `<tr><th>Ancoraggio</th><th>Corrente modello (A)</th><th>Corrente reale (A)</th><th>Ki</th><th>Spinta modello (gf)</th><th>Spinta reale (gf)</th><th>Kt</th><th>Tensione reale (V)</th></tr>`;
+  const calRows = calPoints.length ? calPoints.map(p=>`<tr><td>${fmt(p.anchor,1)}</td><td>${fmt(p.modelCorrente,2)}</td><td>${fmt(p.realCorrente,2)}</td><td>${fmt(p.Ki,3)}</td><td>${fmt(p.modelThrust,1)}</td><td>${fmt(p.realThrust,1)}</td><td>${fmt(p.Kt,3)}</td><td>${p.realVoltage?fmt(p.realVoltage,2):''}</td></tr>`).join('') : `<tr><td colspan="8" style="text-align:left">Nessun punto di calibrazione attivo.</td></tr>`;
+  document.getElementById('calTable').innerHTML = calHeader + calRows;
+
+  drawChart('chartPitch', [
+    {color:'#1f78ff', data:sections.map(s=>({x:s.pctR,y:s.pitchIn})), labels:p=>`${fmt(p.y,2)}"`}
+  ], {xMin:0,xMax:100,yMin:0,xFmt:x=>`${Math.round(x)}%`, yFmt:y=>fmt(y,1)});
+  drawChart('chartAngle', [
+    {color:'#d94a4a', data:sections.map(s=>({x:s.pctR,y:s.beta})), labels:p=>`${fmt(p.y,1)}°`}
+  ], {xMin:0,xMax:100,yMin:0,xFmt:x=>`${Math.round(x)}%`, yFmt:y=>fmt(y,0)});
+  drawChart('chartThrustRpm', [
+    {color:'#7c55d8', data:rpmPts.map((r,i)=>({x:r,y:thrustPts[i]})), stroke:2.0, dash:'6 5'},
+    {color:'#1f9d5a', data:rpmPts.map((r,i)=>({x:r,y:thrustPtsCal[i]})), stroke:2.4, labels:(p)=>`${fmt0(p.y)}`}
+  ], {xMin:0,xMax:Math.max(35000, Math.ceil(rpmNoLoadFull/5000)*5000), yMin:0, xFmt:x=>fmt0(x), yFmt:y=>fmt0(y)});
+  drawChart('chartThrustCurrent', [
+    {color:'#7c55d8', data:currentPts.map((c,i)=>({x:c,y:thrustPts[i]})), stroke:2.0, dash:'6 5'},
+    {color:'#0f9fb7', data:currentPtsCal.map((c,i)=>({x:c,y:thrustPtsCal[i]})), stroke:2.4, labels:(p)=>`${fmt0(p.y)}`}
+  ], {xMin:0,xMax:Math.max(90, Math.ceil(Math.max(...currentPtsCal, ...currentPts)/10)*10), yMin:0, xFmt:x=>fmt0(x), yFmt:y=>fmt0(y)});
+  drawChart('chartEff', [
+    {color:'#7c55d8', data:rpmPts.map((r,i)=>({x:r,y:effPts[i]})), stroke:2.0, dash:'6 5'},
+    {color:'#ffb020', data:rpmPts.map((r,i)=>({x:r,y:effPtsCal[i]})), stroke:2.4, labels:(p)=>fmt(p.y,2)}
+  ], {xMin:0,xMax:Math.max(35000, Math.ceil(rpmNoLoadFull/5000)*5000), yMin:0, xFmt:x=>fmt0(x), yFmt:y=>fmt(y,2)});
+  drawChart('chartLoad', [
+    {color:'#7c55d8', data:loadPts.map(p=>({x:p.x,y:p.y})), labels:p=>fmt(p.y,2)}
+  ], {xMin:0,xMax:100,yMin:0, xFmt:x=>`${Math.round(x)}%`, yFmt:y=>fmt(y,2)});
+  drawChart('chartKt', [
+    {color:'#1f9d5a', data:calPoints.map(p=>({x:p.anchor,y:p.Kt})), labels:p=>fmt(p.y,2)}
+  ], {xMin:calPoints.length?Math.min(...calPoints.map(p=>p.anchor))*0.9:0, xMax:calPoints.length?Math.max(...calPoints.map(p=>p.anchor))*1.05:1, yMin:0, xFmt:x=>fmt0(x), yFmt:y=>fmt(y,2)});
+  drawChart('chartKi', [
+    {color:'#d94a4a', data:calPoints.map(p=>({x:p.anchor,y:p.Ki})), labels:p=>fmt(p.y,2)}
+  ], {xMin:calPoints.length?Math.min(...calPoints.map(p=>p.anchor))*0.9:0, xMax:calPoints.length?Math.max(...calPoints.map(p=>p.anchor))*1.05:1, yMin:0, xFmt:x=>fmt0(x), yFmt:y=>fmt(y,2)});
+
+  const outerPitch = interpolateAt(87.5, sections,'pctR','pitchIn');
+  const midPitch = interpolateAt(62.5, sections,'pctR','pitchIn');
+  const rootPitch = interpolateAt(25, sections,'pctR','pitchIn');
+  const twistDelta = sections[sections.length-1].beta - sections[0].beta;
+  const peakEff = Math.max(...effPtsCal), peakEffIdx = effPtsCal.indexOf(peakEff);
+  const peakThrust = Math.max(...thrustPtsCal), peakThrustIdx = thrustPtsCal.indexOf(peakThrust);
+
+  const styleClass = pitch75 >= 4.4 ? "elica prestazionale ad alto pitch" : pitch75 >= 3.8 ? "elica race bilanciata" : "elica più efficiente a pitch ridotto";
+  const loadingDesc = outerBias > 1.15 ? "La pala è chiaramente caricata nella zona medio-esterna. Questa geometria in genere favorisce la velocità massima e la spinta sostenuta quando gli RPM salgono." :
+                      outerBias > 0.95 ? "Il carico della pala appare abbastanza bilanciato lungo la parte aerodinamicamente utile." :
+                      "La pala appare più caricata al root/mezzeria, cosa che in genere favorisce un bite più precoce e una minore vocazione alla pura velocità di punta.";
+  const calDesc = calMode === 'off' || !bench.length
+    ? "La calibrazione è attualmente disattivata, quindi il tool mostra solo il modello ingegneristico generico."
+    : calMode === 'single'
+      ? `È attiva la calibrazione a fattore singolo. Il tool applica fattori medi di correzione Kt≈${fmt(KtMean,3)} e Ki≈${fmt(KiMean,3)} across the full operating range.`
+      : `È attiva la calibrazione per curva. Il tool interpola i fattori di correzione di spinta e corrente a partire da ${bench.length} punti reali di thrust stand usando ${calAnchor} come variabile di ancoraggio, poi applica la correzione blendata lungo tutte le curve del modello.`;
+
+  document.getElementById('report').textContent =
+`Riepilogo configurazione
+• Diametro: ${fmt(diameterIn,2)}" (${fmt(inToMm(diameterIn),1)} mm)
+• Raggio: ${fmt(radiusMm,2)} mm
+• Numero pale: ${bladeCount}
+• Peso elica: ~${fmt(propWeight,1)} g
+• Motore: ${fmt0(kv)} KV
+• Batteria: ${cells}S (${fmt(vNom,1)} V nominali, ${fmt(vFull,1)} V a piena carica)
+• Classificazione geometrica elica: ${styleClass}
+
+Interpretazione geometrica
+• Pitch equivalente al 75%R: ${fmt(pitch75,2)}" (${fmt(pitch75mm,2)} mm)
+• Pitch al root a 25%R: ${fmt(rootPitch,2)}"
+• Pitch medio a 62.5%R: ${fmt(midPitch,2)}"
+• Pitch esterno a 87.5%R: ${fmt(outerPitch,2)}"
+• Twist misurato complessivo: circa ${fmt(Math.abs(twistDelta),1)}°
+• Carico relativo pala: massimo dove corda, pitch locale e raggio si combinano in modo più efficace
+• Stima automatica di solidity: σ ≈ ${fmt(solidity,3)}
+• Camber factor usato nel modello: ${camberFactor>=0?'+':''}${fmt(camberFactor,2)}
+• Sweep factor usato nel modello: ${fmt(sweepFactor,2)}
+• Angolo di droop usato nel modello: ${fmt(droopAngleDeg,1)}°
+
+${loadingDesc}
+
+Interpretazione di camber, sweep e droop
+• Un camber factor positivo aumenta il carico locale della sezione, tende ad aumentare spinta/bite e in genere aumenta anche la corrente richiesta.
+• Un camber factor negativo rappresenta un retro più reflex / scarico e tende a ridurre un po' il bite, rendendo il comportamento più pulito in alta velocità.
+• Uno sweep factor più alto rappresenta una pala più sciabolata: nel modello riduce leggermente l'aggressività statica e rende il comportamento un po' più progressivo.
+• Un droop negativo (punta più bassa del mozzo) tende a favorire stabilità, progressività e pulizia in aria disturbata, con una lieve riduzione della brutalità statica.
+
+Interpretazione motore ed elettrica
+• Velocità a vuoto a piena carica: ~${fmt0(rpmNoLoadFull)} RPM
+• Velocità stimata a pieno gas sotto carico: ~${fmt0(rpmLoadedFull)} RPM
+• Corrente stimata in zona di lavoro sotto carico: ~${fmt(currentAtLoaded,1)} A per motore
+• Potenza elettrica stimata in quel punto: ~${fmt0(powerAtLoaded)} W per motore
+• Spinta stimata in quel punto di lavoro: ~${fmt(thrustAtLoaded/1000,2)} kgf per motore
+• Spinta per ampere stimata in quella zona: ~${fmt(thrustPerAmpAtTypical,1)} gf/A
+• Spinta di picco stimata nella sweep generata: ~${fmt(peakThrust/1000,2)} kgf intorno a ${fmt0(rpmPts[peakThrustIdx])} RPM
+• La massima efficienza relativa della curva calibrata appare intorno a ${fmt0(rpmPts[peakEffIdx])} RPM
+
+Interpretazione della calibrazione
+${calDesc}
+• Kt = spinta_reale / spinta_modello
+• Ki = corrente_reale / corrente_modello
+• Se Kt < 1, il modello generico era ottimista sulla spinta.
+• Se Ki > 1, il modello generico era ottimista sul carico elettrico.
+
+Spiegazione tecnica dei calcoli
+1) Il pitch locale viene calcolato geometricamente da ogni sezione misurata usando:
+   P(r) = 2 · π · r · tan(β)
+
+2) Il “pitch equivalente” viene assunto al 75% del raggio. È un riferimento comune perché la zona aerodinamicamente più utile della pala non è né vicinissima al mozzo né sulla punta estrema.
+
+3) La solidity viene stimata automaticamente con:
+   σ ≈ (N × c_media) / (π × R)
+   dove N è il numero di pale, c_media è la corda media e R è il raggio.
+
+4) Il carico relativo pala viene stimato da:
+   corda locale × pitch locale × raggio normalizzato
+   Non è un risultato CFD esatto, ma aiuta a visualizzare dove la pala dovrebbe lavorare di più.
+
+5) Camber factor, sweep factor e angolo di droop vengono usati come termini correttivi di alto livello quando la famiglia di profilo esatta non è nota:
+   • camber positivo → sezione più carica
+   • camber negativo → sezione più reflex / retro scarico
+   • sweep alto → pala più sciabolata e progressiva
+   • droop negativo → pala più stabile e meno brutale staticamente
+
+6) Gli RPM a vuoto del motore sono calcolati con:
+   RPM_no-load = KV × V_full
+
+7) Gli RPM sotto carico vengono stimati con un fattore impostabile dall'utente. Questo fattore ingloba drag dell'elica, comportamento ESC, sag della batteria e slip del motore.
+
+8) Le curve generiche di spinta e corrente vengono generate da un modello semplificato calibrato sul comportamento tipico di eliche racing da 5 pollici. Sono stime ingegneristiche di base.
+
+9) La calibrazione reale da thrust stand corregge poi il modello generico:
+   • in modalità fattore singolo, viene applicato un Kt medio e un Ki medio
+   • in modalità curva, Kt e Ki vengono interpolati lungo il range operativo
+
+10) Se è presente la tensione misurata al banco, la potenza elettrica calibrata viene calcolata con:
+   P = I_calibrata × V_misurata
+   Altrimenti il tool usa la stima nominale o a piena tensione selezionata.
+
+Linee guida di progetto
+• Per una configurazione seria, scegli l'ESC sulla base del picco di corrente calibrato, non solo del modello generico.
+• La qualità della batteria conta perché il sag modifica sia gli RPM sia la spinta. Se hai la tensione misurata dal banco, il tool la usa.
+• Più punti thrust-stand fornisci nel range operativo, più le curve calibrate diventano rappresentative.
+• Per ottenere il massimo dal tool, calibra con lo stesso motore, timing ESC, batteria ed elica che vuoi valutare.`;
+
+  window.__analysis = {
+    sections, chords, rpmPts,
+    thrustPts, thrustPtsCal,
+    currentPts, currentPtsCal,
+    powerPts, powerPtsCal,
+    effPts, effPtsCal,
+    loadPts, calPoints,
+    pitch75, pitch75mm,
+    rpmNoLoadFull, rpmLoadedFull,
+    currentTypical, currentPeak,
+    powerPerMotor, thrustAtLoaded, thrustPerAmpAtTypical,
+    solidity, camberFactor, sweepFactor
+  };
+}
+function interpolateSeries(xArr, yArr, x){
+  if(xArr.length === 0) return 0;
+  if(x <= xArr[0]) return yArr[0];
+  if(x >= xArr[xArr.length-1]) return yArr[yArr.length-1];
+  for(let i=0;i<xArr.length-1;i++){
+    const xa = xArr[i], xb = xArr[i+1];
+    if(x>=xa && x<=xb){
+      const t = (x-xa)/(xb-xa);
+      return yArr[i] + t*(yArr[i+1]-yArr[i]);
+    }
+  }
+  return yArr[yArr.length-1];
+}
+function deriveModelAtCorrente(current, rpmPts, currentPts, thrustPts){
+  if(current <= currentPts[0]) return {current: currentPts[0], thrust: thrustPts[0]};
+  if(current >= currentPts[currentPts.length-1]) return {current: currentPts[currentPts.length-1], thrust: thrustPts[thrustPts.length-1]};
+  for(let i=0;i<currentPts.length-1;i++){
+    const ca=currentPts[i], cb=currentPts[i+1];
+    if(current>=ca && current<=cb){
+      const t=(current-ca)/(cb-ca);
+      return {
+        current,
+        thrust: thrustPts[i] + t*(thrustPts[i+1]-thrustPts[i]),
+        rpm: rpmPts[i] + t*(rpmPts[i+1]-rpmPts[i])
+      };
+    }
+  }
+  return {current, thrust: thrustPts[thrustPts.length-1]};
+}
+window.addEventListener('load', loadExample);
+</script>
+</body>
+</html>

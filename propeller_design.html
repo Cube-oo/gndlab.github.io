@@ -3,310 +3,531 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Design Mode Eliche FPV</title>
+<title>FPV Propeller Design Tool - Complete Rhino Export</title>
 <style>
-:root{--b:#f4f7fb;--p:#fff;--s:#f8fbff;--t:#172033;--m:#61708a;--l:#d8e2ef;--b1:#1f78ff;--g:#1f9d5a;--o:#f59f00;--r:#d94a4a;--v:#7457d9;--te:#0f9fb7;--sh:0 10px 26px rgba(25,48,89,.08)}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,#f9fbff,#eef4fb);color:var(--t)}.wrap{width:100%;padding:22px 26px}h1{margin:0 0 6px;font-size:30px}h2{margin:0 0 14px;color:#1f5fd4}.sub{color:var(--m);margin-bottom:18px}.grid{display:grid;grid-template-columns:520px minmax(0,1fr);gap:20px}.left,.right{display:grid;gap:18px;min-width:0}.panel,.card,.chart{background:var(--p);border:1px solid var(--l);border-radius:18px;padding:16px;box-shadow:var(--sh);min-width:0}label{display:block;font-size:12px;color:var(--m);margin:8px 0 4px}input,select,button{width:100%;border:1px solid #b8c8dc;border-radius:11px;background:#fff;color:var(--t);padding:10px 12px;font-size:14px}input[type=range]{padding:0;border:none}button{cursor:pointer;color:#fff;background:linear-gradient(180deg,#2f87ff,#1f6ee8);font-weight:700;border-color:#2a72dc}.secondary{background:#fff;color:#1f5aab;border-color:#bdd0ea}.good{background:linear-gradient(180deg,#22a861,#17824a);border-color:#17824a}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}.metric{font-size:24px;font-weight:800;line-height:1.1}.small{font-size:12px;color:var(--m)}.blue{color:var(--b1)}.green{color:var(--g)}.orange{color:var(--o)}.red{color:var(--r)}.violet{color:var(--v)}.teal{color:var(--te)}.hint,.report{background:var(--s);border:1px solid var(--l);border-radius:12px;padding:12px;color:#314d72}.report{white-space:pre-wrap;color:#22314b}.formula{font-family:monospace;background:#f7fbff;border:1px solid var(--l);border-radius:10px;padding:10px;margin:8px 0}.pill{display:inline-block;border:1px solid #cfe0f7;background:#f7fbff;color:#2f5d9b;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:700}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px 10px;border-bottom:1px solid #e5edf7;text-align:right}th{background:#f4f8fd;color:#315180;position:sticky;top:0}td:first-child,th:first-child{text-align:left}.charts{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}svg{width:100%;height:320px;border:1px solid #dbe6f4;border-radius:12px;background:#fcfdff}@media(max-width:1500px){.grid{grid-template-columns:1fr}.charts{grid-template-columns:1fr}}@media(max-width:900px){.wrap{padding:14px}.row,.btns{grid-template-columns:1fr}.cards{grid-template-columns:1fr}}@media print{.no-print{display:none}.panel,.card,.chart{box-shadow:none}}
+:root{
+  --bg:#f4f7fb;--panel:#fff;--soft:#f8fbff;--text:#172033;--muted:#60708f;
+  --line:#d8e2ef;--line2:#b8c8dc;--blue:#1f78ff;--green:#1f9d5a;--red:#d94a4a;
+  --violet:#7457d9;--orange:#f59f00;--teal:#0f9fb7;--shadow:0 8px 22px rgba(25,48,89,.08)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{width:100%;max-width:100%;padding:20px}
+h1{margin:0 0 6px;font-size:30px}
+h2{margin:0 0 14px;font-size:24px;color:#0f1b33}
+h3{margin:0 0 10px;font-size:18px}
+.sub{color:var(--muted);margin-bottom:18px}
+.layout{display:grid;grid-template-columns:minmax(420px,560px) minmax(0,1fr);gap:18px;align-items:start}
+.left,.right{display:grid;gap:18px;min-width:0}
+.panel,.card,.chart{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);min-width:0;overflow:hidden}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.field{min-width:0}
+label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}
+input,select,button{width:100%;max-width:100%;min-width:0;border:1px solid var(--line2);border-radius:10px;padding:9px 10px;background:#fff;color:var(--text);font-size:14px}
+button{background:linear-gradient(180deg,#2f87ff,#1f6ee8);color:#fff;font-weight:700;cursor:pointer;border-color:#2a72dc}
+button.secondary{background:#fff;color:#1455aa;border-color:#bdd0ea}
+button.good{background:linear-gradient(180deg,#22a861,#17824a);border-color:#17824a}
+.btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.metric{font-size:23px;font-weight:800;line-height:1.1;word-break:break-word}
+.small{font-size:12px;color:var(--muted)}
+.blue{color:var(--blue)}.green{color:var(--green)}.red{color:var(--red)}.violet{color:var(--violet)}.orange{color:var(--orange)}.teal{color:var(--teal)}
+.table-wrap{overflow:auto;max-width:100%}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border-bottom:1px solid #e5edf7;padding:7px 9px;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{background:#f4f8fd;color:#315180;position:sticky;top:0}
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+svg{width:100%;height:300px;border:1px solid #dbe6f4;border-radius:12px;background:#fcfdff}
+.report{white-space:pre-wrap;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px;color:#22314b}
+.notice{background:#f8fbff;border:1px solid var(--line);border-radius:12px;padding:10px;color:#314d72;font-size:13px;margin-top:10px}
+@media(max-width:1400px){.layout{grid-template-columns:1fr}.charts{grid-template-columns:1fr}}
+@media(max-width:760px){.wrap{padding:12px}.row,.row3,.btns{grid-template-columns:1fr}.cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="no-print"><h1>Propeller Design Mode</h1><div class="sub">Generatore preliminare di geometria pala: inserisci il comportamento desiderato e ottieni angoli, pitch, corda, sweep, camber, droop e stime prestazionali.</div></div>
-<div class="grid">
-<div class="left no-print">
-<div class="panel"><h2>1. Specifiche base</h2>
-<div class="row"><div><label>Diametro elica (pollici)</label><input id="D" type="number" step="0.1" value="7.0"></div><div><label>Numero pale</label><input id="N" type="number" step="1" value="3"></div></div>
-<div class="row"><div><label>Pitch target al 75%R (pollici)</label><input id="P75" type="number" step="0.1" value="3.5"></div><div><label>Numero sezioni radiali</label><input id="NS" type="number" min="6" max="14" step="1" value="9"></div></div>
-<div class="row"><div><label>Famiglia profilo aerodinamico</label><select id="AFAMILY">
-<option value="thin_racing">Thin Racing</option>
-<option value="balanced_fpv" selected>Balanced FPV</option>
-<option value="long_range">Long Range Efficient</option>
-<option value="apc_style">APC Style</option>
-<option value="hq_style">HQ Style</option>
-<option value="gemfan_style">Gemfan Style</option>
-<option value="scimitar_smooth">Scimitar Smooth</option>
-<option value="custom_naca">Custom NACA 4-digit</option>
-</select></div><div><label>NACA custom, es. 2410 / 0010</label><input id="NACA" type="text" value="2410"></div></div>
-<div class="row"><div><label>Raggio minimo utile (%R)</label><input id="RMIN" type="number" step="1" value="18"></div><div><label>Raggio massimo utile (%R)</label><input id="RMAX" type="number" step="1" value="98"></div></div>
-<div class="row"><div><label>KV motore</label><input id="KV" type="number" step="1" value="1300"></div><div><label>Batteria (S)</label><input id="S" type="number" step="1" value="6"></div></div>
-<div class="row"><div><label>Tensione piena per cella (V)</label><input id="VCELL" type="number" step="0.01" value="4.2"></div><div><label>Fattore RPM sotto carico</label><input id="LRF" type="number" step="0.01" value="0.60"></div></div>
+<h1>FPV Propeller Design Tool</h1>
+<div class="sub">Generatore completo con progressione NACA, sciabolatura geometrica, mozzo, multipala, senso CW/CCW e parametri per Rhino.</div>
+
+<div class="layout">
+<div class="left">
+
+<div class="panel">
+<h2>1. Specifiche base</h2>
+<div class="row">
+  <div class="field"><label>Diametro elica (pollici)</label><input id="D" value="7,0"></div>
+  <div class="field"><label>Numero pale</label><input id="N" value="3"></div>
 </div>
-<div class="panel"><h2>2. Obiettivo di volo</h2>
-<div class="row"><div><label>Profilo di progetto</label><select id="PROFILE"><option value="balanced">Balanced race</option><option value="speed">Speed / top-end</option><option value="grip">Grip / corner authority</option><option value="endurance">Endurance / efficiency</option><option value="smooth">Smooth / controllabile</option><option value="safe">Motor safe / low load</option></select></div><div><label>Priorità principale</label><select id="PRIO"><option value="mixed">Compromesso</option><option value="speed">Velocità</option><option value="grip">Grip</option><option value="eff">Efficienza</option><option value="smooth">Smoothness</option><option value="thermal">Sicurezza termica</option></select></div></div>
-<div class="row"><div><label>Sciabolatura geometrica</label><select id="SWMODE"><option value="auto">Auto dal profilo</option><option value="straight">Dritta</option><option value="mild">Leggera</option><option value="medium" selected>Media</option><option value="high">Marcata / scimitar</option><option value="custom">Custom max offset</option></select></div><div><label>Max sweep offset in punta (mm)</label><input id="SWMAX" type="number" step="0.5" value="10"></div></div>
-<label>Aggressività: <span id="agv">55</span>/100</label><input id="AG" type="range" min="0" max="100" value="55" oninput="agv.textContent=this.value">
-<label>Grip in curva: <span id="grv">55</span>/100</label><input id="GR" type="range" min="0" max="100" value="55" oninput="grv.textContent=this.value">
-<label>Efficienza: <span id="efv">50</span>/100</label><input id="EF" type="range" min="0" max="100" value="50" oninput="efv.textContent=this.value">
-<label>Smoothness / prevedibilità: <span id="smv">55</span>/100</label><input id="SM" type="range" min="0" max="100" value="55" oninput="smv.textContent=this.value">
-<label>Limite carico motore: <span id="mlv">60</span>/100</label><input id="ML" type="range" min="0" max="100" value="60" oninput="mlv.textContent=this.value">
-<div class="btns"><button onclick="gen()">Genera progetto</button><button class="secondary" onclick="preset('speed')">Preset speed</button><button class="secondary" onclick="preset('grip')">Preset grip</button><button class="secondary" onclick="preset('endurance')">Preset endurance</button></div>
-<div class="btns"><button class="good" onclick="csvGeom()">Esporta CSV CAD</button><button class="secondary" onclick="csvAnalisi()">Esporta CSV analisi</button><button class="secondary" onclick="window.print()">Stampa / PDF</button><button class="secondary" onclick="copyTable()">Copia tabella</button></div>
+<div class="row">
+  <div class="field"><label>Pitch target 75%R (pollici)</label><input id="P75" value="3,5"></div>
+  <div class="field"><label>Numero sezioni</label><input id="NS" value="10"></div>
 </div>
-<div class="panel"><h2>3. Metodo</h2><div class="formula">β(r) = atan( P(r) / (2 · π · r) )</div>
-<p>Il tool genera una distribuzione <strong>P(r)</strong> in base al comportamento richiesto.</p>
-<ul><li><span class="pill">Speed</span> più pitch in zona 65–85%R e punta scaricata.</li><li><span class="pill">Grip</span> più corda, più solidity e più carico medio.</li><li><span class="pill">Endurance</span> corda ridotta e pitch moderato.</li><li><span class="pill">Smooth</span> più sweep, sciabolatura geometrica e droop negativo.</li><li><span class="pill">Safe</span> limita pitch e corda nella zona esterna.</li></ul>
-<div class="hint">Output preliminare: è una tabella tecnica di partenza per modellazione 3D, confronto e iterazione. La sciabolatura reale viene esportata come sweep_offset_mm, cioè traslazione della sezione vista dall'alto. La famiglia profilo viene esportata per generare sezioni diverse in Rhino.</div></div>
+<div class="row">
+  <div class="field"><label>Raggio minimo utile %R</label><input id="RMIN" value="18"></div>
+  <div class="field"><label>Raggio massimo utile %R</label><input id="RMAX" value="98"></div>
 </div>
+<div class="row">
+  <div class="field"><label>KV motore</label><input id="KV" value="1300"></div>
+  <div class="field"><label>Batteria S</label><input id="S" value="6"></div>
+</div>
+<div class="row">
+  <div class="field"><label>Tensione piena/cella</label><input id="VCELL" value="4,2"></div>
+  <div class="field"><label>Fattore RPM sotto carico</label><input id="LRF" value="0,60"></div>
+</div>
+</div>
+
+<div class="panel">
+<h2>2. Progressione profilo NACA</h2>
+<div class="row3">
+  <div class="field"><label>Root</label><select id="ROOTP"><option>4412</option><option>4410</option><option>2412</option><option>0012</option></select></div>
+  <div class="field"><label>Mid</label><select id="MIDP"><option>2410</option><option>2309</option><option>2412</option><option>0010</option></select></div>
+  <div class="field"><label>Tip</label><select id="TIPP"><option>0008</option><option>0006</option><option>0010</option><option>2408</option></select></div>
+</div>
+<div class="row">
+  <div class="field"><label>Progressione</label><select id="PROGMODE"><option value="smooth">Smooth</option><option value="root_strong">Root più strutturale</option><option value="tip_clean">Tip più pulita</option><option value="linear">Lineare</option></select></div>
+  <div class="field"><label>Reflex punta (-1/+1)</label><input id="TIPREFLEX" value="0,15"></div>
+</div>
+</div>
+
+<div class="panel">
+<h2>3. Parametri costruttivi Rhino</h2>
+<div class="row">
+  <div class="field"><label>Senso rotazione</label><select id="ROT"><option value="CCW">CCW</option><option value="CW">CW</option></select></div>
+  <div class="field"><label>Genera multipala in Rhino</label><select id="MULTI"><option value="yes">Sì</option><option value="no">Solo una pala</option></select></div>
+</div>
+<div class="row">
+  <div class="field"><label>Diametro mozzo (mm)</label><input id="HUBD" value="16"></div>
+  <div class="field"><label>Altezza mozzo (mm)</label><input id="HUBH" value="7"></div>
+</div>
+<div class="row">
+  <div class="field"><label>Foro albero (mm)</label><input id="SHAFTD" value="5"></div>
+  <div class="field"><label>Raggio raccordo pala-mozzo (mm)</label><input id="FILLET" value="2,0"></div>
+</div>
+<div class="row">
+  <div class="field"><label>Fattore spessore strutturale</label><input id="STRUCT" value="1,00"></div>
+  <div class="field"><label>Spessore minimo TE (mm)</label><input id="TEMIN" value="0,25"></div>
+</div>
+<div class="row">
+  <div class="field"><label>Raggio bordo d'attacco LE (0-1)</label><input id="LER" value="0,55"></div>
+  <div class="field"><label>Bordo d'uscita TE sharpness (0-1)</label><input id="TES" value="0,75"></div>
+</div>
+<div class="row">
+  <div class="field"><label>Export STL automatico Rhino</label><select id="STL"><option value="no">No</option><option value="yes">Sì, prova export STL</option></select></div>
+  <div class="field"><label>Nome progetto</label><input id="PNAME" value="FPV_Propeller"></div>
+</div>
+<div class="notice">Il raccordo pala-mozzo viene indicato a Rhino come riferimento: la rifinitura finale con BlendSrf / FilletSrf resta consigliata manualmente.</div>
+</div>
+
+<div class="panel">
+<h2>4. Obiettivo</h2>
+<div class="row">
+  <div class="field"><label>Profilo progetto</label><select id="PROFILE"><option value="balanced">Balanced</option><option value="speed">Speed</option><option value="grip">Grip</option><option value="endurance">Endurance</option><option value="smooth">Smooth</option><option value="safe">Motor safe</option></select></div>
+  <div class="field"><label>Priorità</label><select id="PRIO"><option value="mixed">Compromesso</option><option value="speed">Velocità</option><option value="grip">Grip</option><option value="eff">Efficienza</option><option value="smooth">Smooth</option><option value="thermal">Termica</option></select></div>
+</div>
+<div class="row">
+  <div class="field"><label>Sciabolatura</label><select id="SWMODE"><option value="auto">Auto</option><option value="straight">Dritta</option><option value="mild">Leggera</option><option value="medium" selected>Media</option><option value="high">Marcata</option><option value="custom">Custom</option></select></div>
+  <div class="field"><label>Max sweep offset punta mm</label><input id="SWMAX" value="10"></div>
+</div>
+<label>Aggressività <span id="agv">55</span>/100</label><input id="AG" type="range" min="0" max="100" value="55" oninput="agv.textContent=this.value">
+<label>Grip <span id="grv">55</span>/100</label><input id="GR" type="range" min="0" max="100" value="55" oninput="grv.textContent=this.value">
+<label>Efficienza <span id="efv">50</span>/100</label><input id="EF" type="range" min="0" max="100" value="50" oninput="efv.textContent=this.value">
+<label>Smoothness <span id="smv">55</span>/100</label><input id="SM" type="range" min="0" max="100" value="55" oninput="smv.textContent=this.value">
+<label>Limite carico <span id="mlv">60</span>/100</label><input id="ML" type="range" min="0" max="100" value="60" oninput="mlv.textContent=this.value">
+<div class="btns"><button onclick="gen()">Genera</button><button class="secondary" onclick="preset('speed')">Speed</button><button class="secondary" onclick="preset('grip')">Grip</button><button class="secondary" onclick="preset('endurance')">Endurance</button></div>
+<div class="btns"><button class="good" onclick="csvGeom()">CSV CAD</button><button class="secondary" onclick="csvAnalisi()">CSV analisi</button><button class="secondary" onclick="window.print()">PDF</button><button class="secondary" onclick="copyTable()">Copia</button></div>
+</div>
+
+</div>
+
 <div class="right">
 <div class="cards">
-<div class="card"><div class="small">Pitch equivalente 75%R</div><div class="metric blue" id="mP">–</div><div class="small" id="mPmm">–</div></div>
-<div class="card"><div class="small">Solidity stimata σ</div><div class="metric teal" id="mSol">–</div><div class="small" id="mChord">–</div></div>
-<div class="card"><div class="small">RPM sotto carico</div><div class="metric green" id="mRPM">–</div><div class="small" id="mNo">–</div></div>
-<div class="card"><div class="small">Corrente stimata</div><div class="metric red" id="mI">–</div><div class="small">per motore</div></div>
-<div class="card"><div class="small">Spinta stimata</div><div class="metric violet" id="mT">–</div><div class="small">per motore</div></div>
-<div class="card"><div class="small">Carattere progetto</div><div class="metric orange" id="mC">–</div><div class="small" id="mCs">–</div></div>
+  <div class="card"><div class="small">Pitch 75%R</div><div class="metric blue" id="mP">-</div><div class="small" id="mPmm">-</div></div>
+  <div class="card"><div class="small">Solidity</div><div class="metric teal" id="mSol">-</div><div class="small" id="mChord">-</div></div>
+  <div class="card"><div class="small">RPM carico</div><div class="metric green" id="mRPM">-</div><div class="small" id="mNo">-</div></div>
+  <div class="card"><div class="small">Corrente</div><div class="metric red" id="mI">-</div><div class="small">per motore</div></div>
+  <div class="card"><div class="small">Spinta</div><div class="metric violet" id="mT">-</div><div class="small">per motore</div></div>
+  <div class="card"><div class="small">Profili</div><div class="metric orange" id="mC">-</div><div class="small" id="mCs">-</div></div>
 </div>
-<div class="panel"><h2>4. Tabella geometria generata</h2><div class="table-wrap"><table id="tbl"></table></div></div>
-<div class="charts">
-<div class="chart"><h3>Pitch distribution [in vs %R]</h3><svg id="cPitch"></svg></div>
-<div class="chart"><h3>Angolo pala β [deg vs %R]</h3><svg id="cAngle"></svg></div>
-<div class="chart"><h3>Corda [mm vs %R]</h3><svg id="cChord"></svg></div>
-<div class="chart"><h3>Carico relativo pala [- vs %R]</h3><svg id="cLoad"></svg></div>
-<div class="chart"><h3>Sweep / droop / camber</h3><svg id="cShape"></svg></div>
-<div class="chart"><h3>Stima thrust-current [gf vs A]</h3><svg id="cPerf"></svg></div>
-</div>
-<div class="panel"><h2>5. Interpretazione tecnica</h2><div id="rep" class="report"></div></div>
-</div>
-</div></div>
-<script>
-const $=id=>document.getElementById(id), F=(n,d=2)=>Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}), F0=n=>Math.round(n).toLocaleString(), MM=i=>i*25.4, IN=mm=>mm/25.4, CL=(v,a,b)=>Math.max(a,Math.min(b,v)), LP=(a,b,t)=>a+(b-a)*t;
-function chart(id,ss,o={}){let svg=$(id),W=svg.clientWidth||640,H=svg.clientHeight||320;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);let m={l:58,r:18,t:18,b:38},w=W-m.l-m.r,h=H-m.t-m.b,all=ss.flatMap(s=>s.d),x0=o.x0??Math.min(...all.map(p=>p.x)),x1=o.x1??Math.max(...all.map(p=>p.x)),yr0=o.y0??Math.min(...all.map(p=>p.y)),yr1=o.y1??Math.max(...all.map(p=>p.y)),pad=(yr1-yr0||1)*.12,y0=o.y0??Math.min(0,yr0-pad),y1=o.y1??yr1+pad,sx=x=>m.l+(x-x0)/(x1-x0||1)*w,sy=y=>m.t+h-(y-y0)/(y1-y0||1)*h,out=`<rect width="${W}" height="${H}" fill="#fcfdff"/>`;for(let i=0;i<=5;i++){let x=x0+i*(x1-x0)/5,px=sx(x);out+=`<line x1="${px}" y1="${m.t}" x2="${px}" y2="${m.t+h}" stroke="#e3ecf7"/><text x="${px}" y="${H-12}" fill="#5e7597" font-size="11" text-anchor="middle">${o.xf?o.xf(x):F0(x)}</text>`}for(let i=0;i<=5;i++){let y=y0+i*(y1-y0)/5,py=sy(y);out+=`<line x1="${m.l}" y1="${py}" x2="${m.l+w}" y2="${py}" stroke="#e3ecf7"/><text x="${m.l-8}" y="${py+4}" fill="#5e7597" font-size="11" text-anchor="end">${o.yf?o.yf(y):F(y,1)}</text>`}out+=`<line x1="${m.l}" y1="${m.t}" x2="${m.l}" y2="${m.t+h}" stroke="#7a95bc"/><line x1="${m.l}" y1="${m.t+h}" x2="${m.l+w}" y2="${m.t+h}" stroke="#7a95bc"/>`;ss.forEach(s=>{let p=s.d.map((q,i)=>`${i?'L':'M'} ${sx(q.x)} ${sy(q.y)}`).join(' ');out+=`<path d="${p}" fill="none" stroke="${s.c}" stroke-width="2.4"/>`;s.d.forEach(q=>out+=`<circle cx="${sx(q.x)}" cy="${sy(q.y)}" r="3" fill="${s.c}"/>`)});svg.innerHTML=out}
-function base(p){let b={po:0,tr:.15,cs:1,cm:0,sw:.35,ca:0,dr:-2,ll:1,lab:'Balanced'};if(p==='speed')Object.assign(b,{po:.18,tr:.22,cs:.92,cm:-.05,sw:.55,ca:-.15,dr:-2,ll:1.05,lab:'Speed'});if(p==='grip')Object.assign(b,{po:.04,tr:.1,cs:1.16,cm:.18,sw:.35,ca:.25,dr:-3.5,ll:1.12,lab:'Grip'});if(p==='endurance')Object.assign(b,{po:-.08,tr:.25,cs:.82,cm:-.1,sw:.45,ca:-.2,dr:-1.5,ll:.82,lab:'Endurance'});if(p==='smooth')Object.assign(b,{po:.02,tr:.18,cs:.98,cm:.05,sw:.65,ca:-.05,dr:-4.5,ll:.95,lab:'Smooth'});if(p==='safe')Object.assign(b,{po:-.12,tr:.28,cs:.86,cm:-.05,sw:.42,ca:-.1,dr:-2,ll:.75,lab:'Motor safe'});return b}
 
-function airfoilBase(family){
-  let p={name:'Balanced FPV', thicknessRoot:.105, thicknessMid:.082, thicknessTip:.055, camberBase:.08, reflex:.00};
-  if(family==='thin_racing')p={name:'Thin Racing',thicknessRoot:.090,thicknessMid:.064,thicknessTip:.040,camberBase:.045,reflex:.10};
-  if(family==='balanced_fpv')p={name:'Balanced FPV',thicknessRoot:.105,thicknessMid:.080,thicknessTip:.052,camberBase:.075,reflex:.02};
-  if(family==='long_range')p={name:'Long Range Efficient',thicknessRoot:.125,thicknessMid:.095,thicknessTip:.062,camberBase:.105,reflex:-.03};
-  if(family==='apc_style')p={name:'APC Style',thicknessRoot:.130,thicknessMid:.100,thicknessTip:.065,camberBase:.115,reflex:-.02};
-  if(family==='hq_style')p={name:'HQ Style',thicknessRoot:.095,thicknessMid:.070,thicknessTip:.045,camberBase:.060,reflex:.06};
-  if(family==='gemfan_style')p={name:'Gemfan Style',thicknessRoot:.105,thicknessMid:.078,thicknessTip:.050,camberBase:.085,reflex:.03};
-  if(family==='scimitar_smooth')p={name:'Scimitar Smooth',thicknessRoot:.110,thicknessMid:.078,thicknessTip:.047,camberBase:.055,reflex:.12};
-  if(family==='custom_naca')p={name:'Custom NACA',thicknessRoot:.110,thicknessMid:.090,thicknessTip:.065,camberBase:.070,reflex:.00};
-  return p;
+<div class="panel"><h2>5. Tabella geometria</h2><div class="table-wrap"><table id="tbl"></table></div></div>
+
+<div class="charts">
+  <div class="chart"><h3>Pitch [in]</h3><svg id="cPitch"></svg></div>
+  <div class="chart"><h3>Angolo β [deg]</h3><svg id="cAngle"></svg></div>
+  <div class="chart"><h3>Corda [mm]</h3><svg id="cChord"></svg></div>
+  <div class="chart"><h3>Spessore [%]</h3><svg id="cThick"></svg></div>
+  <div class="chart"><h3>Sweep / camber / droop</h3><svg id="cShape"></svg></div>
+  <div class="chart"><h3>Thrust-current</h3><svg id="cPerf"></svg></div>
+</div>
+
+<div class="panel"><h2>6. Report</h2><div class="report" id="rep"></div></div>
+</div>
+</div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function num(id, def = 0){
+  const el = $(id);
+  if(!el) return def;
+  let v = String(el.value ?? "").trim().replace(",", ".");
+  let n = parseFloat(v);
+  return Number.isFinite(n) ? n : def;
 }
-function thicknessAtPct(af,pct){
-  let x=pct/100;
-  let t;
-  if(x<.45)t=LP(af.thicknessRoot,af.thicknessMid,x/.45);
-  else t=LP(af.thicknessMid,af.thicknessTip,(x-.45)/.55);
-  return CL(t,.025,.18);
+
+function F(n, d = 2){
+  return Number(n).toLocaleString("it-IT", {minimumFractionDigits:d, maximumFractionDigits:d});
+}
+function F0(n){ return Math.round(Number(n)).toLocaleString("it-IT"); }
+function MM(inches){ return inches * 25.4; }
+function CL(v, a, b){ return Math.max(a, Math.min(b, v)); }
+function LP(a, b, t){ return a + (b - a) * t; }
+
+function parseNACA(code){
+  let c = String(code || "0010").replace(/[^0-9]/g, "");
+  if(c.length !== 4) c = "0010";
+  return {
+    m: Number(c[0]) / 100,
+    p: Math.max(Number(c[1]) / 10, 0.05),
+    t: Number(c.slice(2)) / 100,
+    code: c
+  };
+}
+
+function interpProfile(a, b, t){
+  const A = parseNACA(a);
+  const B = parseNACA(b);
+  const mDigit = Math.round(LP(Number(A.code[0]), Number(B.code[0]), t));
+  const pDigit = Math.round(LP(Number(A.code[1]), Number(B.code[1]), t));
+  const th = String(Math.round(LP(Number(A.code.slice(2)), Number(B.code.slice(2)), t))).padStart(2, "0");
+  return {
+    m: LP(A.m, B.m, t),
+    p: LP(A.p, B.p, t),
+    t: LP(A.t, B.t, t),
+    code: `${mDigit}${pDigit}${th}`
+  };
+}
+
+function localProfile(root, mid, tip, pct, mode){
+  const x = pct / 100;
+  if(x < 0.55){
+    let t = x / 0.55;
+    if(mode === "root_strong") t = Math.pow(t, 1.4);
+    return interpProfile(root, mid, CL(t, 0, 1));
+  }
+  let t = (x - 0.55) / 0.45;
+  if(mode === "tip_clean") t = Math.pow(t, 0.65);
+  return interpProfile(mid, tip, CL(t, 0, 1));
+}
+
+function chart(id, series, opt = {}){
+  const svg = $(id);
+  if(!svg || !series.length) return;
+
+  const W = svg.clientWidth || 600;
+  const H = svg.clientHeight || 300;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+
+  const all = series.flatMap(s => s.d).filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
+  if(!all.length){
+    svg.innerHTML = "";
+    return;
+  }
+
+  const m = {l:58, r:16, t:16, b:36};
+  const w = W - m.l - m.r;
+  const h = H - m.t - m.b;
+
+  const x0 = opt.x0 ?? Math.min(...all.map(p => p.x));
+  const x1 = opt.x1 ?? Math.max(...all.map(p => p.x));
+  let y0 = opt.y0 ?? Math.min(0, Math.min(...all.map(p => p.y)));
+  let y1 = opt.y1 ?? Math.max(...all.map(p => p.y)) * 1.12;
+
+  if(!Number.isFinite(y0)) y0 = 0;
+  if(!Number.isFinite(y1) || y1 === y0) y1 = y0 + 1;
+
+  const sx = x => m.l + ((x - x0) / (x1 - x0 || 1)) * w;
+  const sy = y => m.t + h - ((y - y0) / (y1 - y0 || 1)) * h;
+
+  let out = `<rect width="${W}" height="${H}" fill="#fcfdff"/>`;
+
+  for(let i=0;i<=5;i++){
+    const x = x0 + i*(x1-x0)/5;
+    const px = sx(x);
+    out += `<line x1="${px}" y1="${m.t}" x2="${px}" y2="${m.t+h}" stroke="#e3ecf7"/>`;
+    out += `<text x="${px}" y="${H-10}" fill="#60708f" font-size="11" text-anchor="middle">${Math.round(x)}%</text>`;
+  }
+
+  for(let i=0;i<=5;i++){
+    const y = y0 + i*(y1-y0)/5;
+    const py = sy(y);
+    out += `<line x1="${m.l}" y1="${py}" x2="${m.l+w}" y2="${py}" stroke="#e3ecf7"/>`;
+    out += `<text x="${m.l-7}" y="${py+4}" fill="#60708f" font-size="11" text-anchor="end">${F(y,1)}</text>`;
+  }
+
+  series.forEach(s => {
+    const pts = s.d.filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
+    if(!pts.length) return;
+    const path = pts.map((p,i) => `${i ? "L" : "M"} ${sx(p.x)} ${sy(p.y)}`).join(" ");
+    out += `<path d="${path}" fill="none" stroke="${s.c}" stroke-width="2.4"/>`;
+    pts.forEach(p => out += `<circle cx="${sx(p.x)}" cy="${sy(p.y)}" r="3" fill="${s.c}"/>`);
+  });
+
+  svg.innerHTML = out;
+}
+
+function base(profile){
+  const b = {po:0, tr:.15, cs:1, cm:0, sw:.35, ca:0, dr:-2, lab:"Balanced"};
+  if(profile === "speed") Object.assign(b,{po:.18,tr:.22,cs:.92,cm:-.05,sw:.55,ca:-.15,dr:-2,lab:"Speed"});
+  if(profile === "grip") Object.assign(b,{po:.04,tr:.10,cs:1.16,cm:.18,sw:.35,ca:.25,dr:-3.5,lab:"Grip"});
+  if(profile === "endurance") Object.assign(b,{po:-.08,tr:.25,cs:.82,cm:-.10,sw:.45,ca:-.20,dr:-1.5,lab:"Endurance"});
+  if(profile === "smooth") Object.assign(b,{po:.02,tr:.18,cs:.98,cm:.05,sw:.65,ca:-.05,dr:-4.5,lab:"Smooth"});
+  if(profile === "safe") Object.assign(b,{po:-.12,tr:.28,cs:.86,cm:-.05,sw:.42,ca:-.10,dr:-2,lab:"Safe"});
+  return b;
 }
 
 function gen(){
-let D=+$('D').value,R=MM(D)/2,N=+$('N').value,P75=+$('P75').value,NS=CL(+$('NS').value,6,14),rmin=CL(+$('RMIN').value,8,45),rmax=CL(+$('RMAX').value,70,100),KV=+$('KV').value,S=+$('S').value,V=+$('VCELL').value,LRF=+$('LRF').value,p=$('PROFILE').value,pr=$('PRIO').value,ag=+$('AG').value/100,gr=+$('GR').value/100,ef=+$('EF').value/100,sm=+$('SM').value/100,ml=+$('ML').value/100,swmode=$('SWMODE').value,swmaxUser=+$('SWMAX').value,afam=$('AFAMILY').value,nacaCode=$('NACA').value.trim(),b=base(p);
+  try{
+    const D = num("D", 7);
+    const R = MM(D) / 2;
+    const N = num("N", 3);
+    const P75 = num("P75", 3.5);
+    const NS = CL(Math.round(num("NS", 10)), 6, 18);
+    const rmin = CL(num("RMIN", 18), 8, 45);
+    const rmax = CL(num("RMAX", 98), 70, 100);
 
-let sb=(p==='speed'? .22:0)+(pr==='speed'? .18:0)+(ag-.5)*.2,
-    gb=(p==='grip'? .22:0)+(pr==='grip'? .18:0)+(gr-.5)*.25,
-    eb=(p==='endurance'? .22:0)+(pr==='eff'? .2:0)+(ef-.5)*.22,
-    mb=(p==='smooth'? .22:0)+(pr==='smooth'? .2:0)+(sm-.5)*.22,
-    tb=(p==='safe'? .2:0)+(pr==='thermal'? .22:0)+(.5-ml)*.25;
+    const KV = num("KV", 1300);
+    const S = num("S", 6);
+    const V = num("VCELL", 4.2);
+    const LRF = num("LRF", 0.60);
 
-let po=b.po+sb*.35-eb*.18-tb*.22,
-    tr=CL(b.tr+eb*.18+tb*.16+mb*.06-sb*.04,.04,.45),
-    cs=CL(b.cs+gb*.35-eb*.28-tb*.25,.55,1.45),
-    cm=b.cm+gb*.35+mb*.08-eb*.1,
-    sw=CL(b.sw+mb*.35+sb*.18-gb*.05,0,1),
-    ca=CL(b.ca+gb*.45+ag*.18-sb*.18-eb*.22-tb*.15,-1,1),
-    dr=CL(b.dr-mb*4-gb*2.2+ag*1,-8,3),
-    rows=[];
+    const profile = $("PROFILE").value;
+    const priority = $("PRIO").value;
+    const ag = num("AG", 55) / 100;
+    const gr = num("GR", 55) / 100;
+    const ef = num("EF", 50) / 100;
+    const sm = num("SM", 55) / 100;
+    const ml = num("ML", 60) / 100;
 
-let sweepMax=sw*D*25.4*.12;
-if(swmode==='straight')sweepMax=0;
-if(swmode==='mild')sweepMax=D*25.4*.045;
-if(swmode==='medium')sweepMax=D*25.4*.075;
-if(swmode==='high')sweepMax=D*25.4*.115;
-if(swmode==='custom')sweepMax=swmaxUser;
+    const b = base(profile);
 
-let af=airfoilBase(afam);
+    const root = $("ROOTP").value;
+    const mid = $("MIDP").value;
+    const tip = $("TIPP").value;
+    const progMode = $("PROGMODE").value;
+    const tipReflex = num("TIPREFLEX", .15);
 
-for(let i=0;i<NS;i++){
-  let pct=rmin+i*(rmax-rmin)/(NS-1),r=R*pct/100,x=pct/100,shape=1;
-  if(pct<35)shape*=LP(.65,.88,(pct-rmin)/(35-rmin||1));
-  shape*=1+po*Math.exp(-Math.pow((pct-75)/18,2));
-  if(pct>85){let t=(pct-85)/15;shape*=1-tr*t*t}
-  let Pin=P75*shape,Pmm=MM(Pin),beta=Math.atan(Pmm/(2*Math.PI*r))*180/Math.PI;
-  beta=CL(beta,2,62);
-  let cb=D*25.4*.075,root=CL((pct-rmin)/(35-rmin||1),0,1),tip=CL((pct-78)/22,0,1),mid=Math.exp(-Math.pow((pct-58)/22,2));
-  let ch=cb*cs*(.42+.58*root)*(1+cm*mid)*(1-.34*tip*tip);
-  ch=Math.max(2.5,ch);
-  let swl=CL(sw*(.35+.65*x),0,1),
-      swoff=-sweepMax*Math.pow(x,1.65),
-      drl=dr*(.25+.75*x),
-      cal=CL(ca*(.75+.25*Math.exp(-Math.pow((pct-65)/20,2))),-1,1),
-      thick=thicknessAtPct(af,pct),
-      prof=af.name,
-      load=ch*Pin*x;
-  rows.push({pct,r,beta,Pin,Pmm,ch,swl,swoff,drl,cal,thick,prof,load});
-}
+    const swMode = $("SWMODE").value;
+    const swMaxUser = num("SWMAX", 10);
 
-let lm=Math.max(...rows.map(q=>q.load),1);
-rows.forEach(q=>q.ln=q.load/lm);
+    const sb = (profile==="speed" ? .22 : 0) + (priority==="speed" ? .18 : 0) + (ag-.5)*.2;
+    const gb = (profile==="grip" ? .22 : 0) + (priority==="grip" ? .18 : 0) + (gr-.5)*.25;
+    const eb = (profile==="endurance" ? .22 : 0) + (priority==="eff" ? .2 : 0) + (ef-.5)*.22;
+    const mb = (profile==="smooth" ? .22 : 0) + (priority==="smooth" ? .2 : 0) + (sm-.5)*.22;
+    const tb = (profile==="safe" ? .2 : 0) + (priority==="thermal" ? .22 : 0) + (.5-ml)*.25;
 
-let mc=rows.reduce((s,q)=>s+q.ch,0)/rows.length,
-    sol=N*mc/(Math.PI*R),
-    norpm=KV*S*V,
-    lrpm=norpm*LRF,
-    pf=Math.pow(P75/3.5,1.15),
-    df=Math.pow(D/7,2.2),
-    sf=Math.pow(sol/.095,.55),
-    dn=CL(-dr/6,-1,1);
+    const po = b.po + sb*.35 - eb*.18 - tb*.22;
+    const tr = CL(b.tr + eb*.18 + tb*.16 + mb*.06 - sb*.04, .04, .45);
+    const cs = CL(b.cs + gb*.35 - eb*.28 - tb*.25, .55, 1.45);
+    const cm = b.cm + gb*.35 + mb*.08 - eb*.1;
+    const sw = CL(b.sw + mb*.35 + sb*.18 - gb*.05, 0, 1);
+    const ca = CL(b.ca + gb*.45 + ag*.18 - sb*.18 - eb*.22 - tb*.15, -1, 1);
+    const dr = CL(b.dr - mb*4 - gb*2.2 + ag*1, -8, 3);
 
-let I=38*df*pf*sf*(1+.1*ca)*(1-.05*sw)*(1-.04*dn)*CL(.65+ml*.55,.65,1.2)*Math.pow(KV/1300,.55)*Math.pow(S/6,.8);
-I=Math.max(8,I);
+    let sweepMax = sw * D * 25.4 * .12;
+    if(swMode === "straight") sweepMax = 0;
+    if(swMode === "mild") sweepMax = D * 25.4 * .045;
+    if(swMode === "medium") sweepMax = D * 25.4 * .075;
+    if(swMode === "high") sweepMax = D * 25.4 * .115;
+    if(swMode === "custom") sweepMax = swMaxUser;
 
-let T=1450*df*Math.pow(P75/3.5,.45)*Math.pow(sol/.095,.35)*(1+.08*ca)*(1+.03*sw)*(1+.02*dn)*Math.pow(lrpm/19600,1.55);
-T=Math.max(200,T);
+    const rows = [];
 
-$('mP').textContent=F(P75,2)+'"';
-$('mPmm').textContent=F(MM(P75),1)+' mm';
-$('mSol').textContent=F(sol,3);
-$('mChord').textContent='corda media '+F(mc,1)+' mm';
-$('mRPM').textContent=F0(lrpm);
-$('mNo').textContent='a vuoto '+F0(norpm)+' RPM';
-$('mI').textContent=F(I,1)+' A';
-$('mT').textContent=F(T/1000,2)+' kgf';
-$('mC').textContent=b.lab;
-$('mCs').textContent=`${af.name} | sweep ${F(sw,2)} | offset tip ${F(sweepMax,1)} mm | camber ${ca>=0?'+':''}${F(ca,2)} | droop ${F(dr,1)}°`;
+    for(let i=0; i<NS; i++){
+      const pct = rmin + i*(rmax-rmin)/(NS-1);
+      const r = R * pct/100;
+      const x = pct/100;
 
-let tbhtml='<tr><th>%R</th><th>Raggio mm</th><th>β deg</th><th>Pitch in</th><th>Pitch mm</th><th>Corda mm</th><th>Sweep factor</th><th>Sweep offset mm</th><th>Droop deg</th><th>Camber</th><th>Spessore %</th><th>Profilo</th><th>Carico rel.</th></tr>';
-rows.forEach(q=>{
-  tbhtml+=`<tr><td>${F(q.pct,1)}%</td><td>${F(q.r,2)}</td><td>${F(q.beta,2)}</td><td>${F(q.Pin,2)}</td><td>${F(q.Pmm,1)}</td><td>${F(q.ch,2)}</td><td>${F(q.swl,2)}</td><td>${F(q.swoff,2)}</td><td>${F(q.drl,2)}</td><td>${q.cal>=0?'+':''}${F(q.cal,2)}</td><td>${F(q.thick*100,1)}%</td><td>${q.prof}</td><td>${F(q.ln,3)}</td></tr>`;
-});
-$('tbl').innerHTML=tbhtml;
+      let shape = 1;
+      if(pct < 35) shape *= LP(.65, .88, (pct-rmin)/(35-rmin || 1));
+      shape *= 1 + po * Math.exp(-Math.pow((pct-75)/18, 2));
+      if(pct > 85){
+        const q = (pct-85)/15;
+        shape *= 1 - tr*q*q;
+      }
 
-chart('cPitch',[{c:'#1f78ff',d:rows.map(q=>({x:q.pct,y:q.Pin}))}],{x0:0,x1:100,y0:0,xf:x=>F0(x)+'%'});
-chart('cAngle',[{c:'#d94a4a',d:rows.map(q=>({x:q.pct,y:q.beta}))}],{x0:0,x1:100,y0:0,xf:x=>F0(x)+'%'});
-chart('cChord',[{c:'#0f9fb7',d:rows.map(q=>({x:q.pct,y:q.ch}))}],{x0:0,x1:100,y0:0,xf:x=>F0(x)+'%'});
-chart('cLoad',[{c:'#7457d9',d:rows.map(q=>({x:q.pct,y:q.ln}))}],{x0:0,x1:100,y0:0,xf:x=>F0(x)+'%',yf:y=>F(y,2)});
-chart('cShape',[
-  {c:'#1f78ff',d:rows.map(q=>({x:q.pct,y:sweepMax? q.swoff/sweepMax : 0}))},
-  {c:'#d94a4a',d:rows.map(q=>({x:q.pct,y:q.cal}))},
-  {c:'#1f9d5a',d:rows.map(q=>({x:q.pct,y:q.drl/8}))}
-],{x0:0,x1:100,y0:-1,xf:x=>F0(x)+'%',yf:y=>F(y,1)});
+      const Pin = P75 * shape;
+      const Pmm = MM(Pin);
+      const beta = CL(Math.atan(Pmm/(2*Math.PI*r))*180/Math.PI, 2, 62);
 
-let perf=[];
-for(let i=1;i<=7;i++){
-  let t=i/7;
-  perf.push({x:I*Math.pow(t,1.75),y:T*Math.pow(t,1.35)});
-}
-chart('cPerf',[{c:'#f59f00',d:perf}],{x0:0,x1:Math.max(10,I*1.15),y0:0,xf:x=>F0(x),yf:y=>F0(y)});
+      const cb = D * 25.4 * .075;
+      const rt = CL((pct-rmin)/(35-rmin || 1), 0, 1);
+      const tt = CL((pct-78)/22, 0, 1);
+      const mg = Math.exp(-Math.pow((pct-58)/22, 2));
+      const ch = Math.max(2.5, cb*cs*(.42+.58*rt)*(1+cm*mg)*(1-.34*tt*tt));
 
-$('rep').textContent=`Riepilogo progetto generato
-• Diametro: ${F(D,2)}"
-• Numero pale: ${N}
-• Pitch target al 75%R: ${F(P75,2)}"
-• Famiglia profilo aerodinamico: ${af.name}${afam==='custom_naca'?' ('+nacaCode+')':''}
-• Corda media stimata: ${F(mc,2)} mm
-• Solidity stimata: σ ≈ ${F(sol,3)}
-• Spessore relativo root/mid/tip: ${F(af.thicknessRoot*100,1)}% / ${F(af.thicknessMid*100,1)}% / ${F(af.thicknessTip*100,1)}%
-• Sweep factor globale suggerito: ${F(sw,2)}
-• Sciabolatura geometrica massima in punta: ${F(sweepMax,2)} mm
-• Camber globale suggerito: ${ca>=0?'+':''}${F(ca,2)}
-• Droop globale suggerito: ${F(dr,2)}°
-• RPM sotto carico stimati: ~${F0(lrpm)}
-• Corrente stimata a pieno carico: ~${F(I,1)} A per motore
-• Spinta statica stimata: ~${F(T/1000,2)} kgf per motore
+      const prof = localProfile(root, mid, tip, pct, progMode);
+      const swoff = -sweepMax * Math.pow(x, 1.65);
+      const drl = dr * (.25 + .75*x);
+      const cam = CL(ca*(.75+.25*Math.exp(-Math.pow((pct-65)/20,2))) + tipReflex*Math.pow(x,2.2), -1, 1);
+      const load = ch * Pin * x;
 
-Interpretazione sintetica
-• ${P75>=5?'Pala ad alto pitch, orientata a velocità e sostegno agli alti RPM.':P75>=3.8?'Pitch medio-alto, buona spinta utile e comportamento prestazionale.':'Pitch moderato, più controllabile e meno carico elettricamente.'}
-• ${sol>.12?'Solidity alta: più grip e corrente.':sol<.08?'Solidity bassa: più efficienza e meno drag.':'Solidity intermedia: compromesso tra grip, efficienza e carico motore.'}
-• ${sw>.6?'Sweep elevato: progressiva e pulita in aria disturbata.':sw<.25?'Sweep basso: risposta più diretta e secca.':'Sweep medio: equilibrio tra risposta diretta e progressività.'}
-• ${ca>.2?'Camber positivo: più bite e più drag.':ca<-.15?'Camber negativo/reflex: più pulita in velocità e meno spike di corrente.':'Camber neutro/moderato.'}
-• ${dr<-3?'Droop negativo evidente: più stabilità e feeling locked.':dr>1?'Droop positivo: risposta più aggressiva.':'Droop leggero/neutro.'}
+      rows.push({pct,r,beta,Pin,Pmm,ch,swoff,drl,cam,naca:prof.code,m:prof.m,p:prof.p,thick:prof.t,load});
+    }
 
-Come usare questa tabella
-1) Usa raggio, angolo β e corda come base per costruire le sezioni CAD.
-2) Il pitch locale viene generato con β = atan(P / 2πr).
-3) La famiglia profilo definisce spessore relativo, camber base e tendenza reflex della sezione.
-4) Sweep offset mm è la sciabolatura geometrica reale vista dall'alto.
-5) Sweep factor, camber e droop sono indicazioni geometriche di forma.
-6) Dopo la modellazione, rientra nel tool di analisi e verifica pitch, carico, corrente e thrust.
-7) Dopo un prototipo, usa dati thrust-stand reali per correggere la previsione.`;
+    const maxLoad = Math.max(...rows.map(r => r.load), 1);
+    rows.forEach(r => r.ln = r.load / maxLoad);
 
-window.DSG={rows,D,N,P75,sol,mc,sw,sweepMax,ca,dr,I,T,lrpm,norpm,perf,afam,nacaCode,airfoilName:af.name};
-}
+    const meanChord = rows.reduce((s,r)=>s+r.ch,0) / rows.length;
+    const solidity = N * meanChord / (Math.PI * R);
+    const noLoadRpm = KV*S*V;
+    const loadedRpm = noLoadRpm * LRF;
 
-function preset(t){$('PROFILE').value=t;if(t==='speed'){AG.value=75;GR.value=45;EF.value=45;SM.value=55;ML.value=75}else if(t==='grip'){AG.value=60;GR.value=85;EF.value=35;SM.value=55;ML.value=70}else{AG.value=30;GR.value=35;EF.value=85;SM.value=60;ML.value=35}agv.textContent=AG.value;grv.textContent=GR.value;efv.textContent=EF.value;smv.textContent=SM.value;mlv.textContent=ML.value;gen()}
-function save(txt,n){let b=new Blob([txt],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(u),500)}
-function escCSV(v){
-  if(v === undefined || v === null) return "";
-  let s = String(v);
-  if(s.includes(",") || s.includes("\"") || s.includes("\n")){
-    s = '"' + s.replaceAll('"','""') + '"';
+    const current = Math.max(8,
+      38*Math.pow(D/7,2.2)*Math.pow(P75/3.5,1.15)*Math.pow(solidity/.095,.55)*Math.pow(KV/1300,.55)*Math.pow(S/6,.8)
+    );
+
+    const thrust = Math.max(200,
+      1450*Math.pow(D/7,2.2)*Math.pow(P75/3.5,.45)*Math.pow(solidity/.095,.35)*Math.pow(loadedRpm/19600,1.55)
+    );
+
+    $("mP").textContent = F(P75,2) + '"';
+    $("mPmm").textContent = F(MM(P75),1) + " mm";
+    $("mSol").textContent = F(solidity,3);
+    $("mChord").textContent = "corda media " + F(meanChord,1) + " mm";
+    $("mRPM").textContent = F0(loadedRpm);
+    $("mNo").textContent = "a vuoto " + F0(noLoadRpm) + " RPM";
+    $("mI").textContent = F(current,1) + " A";
+    $("mT").textContent = F(thrust/1000,2) + " kgf";
+    $("mC").textContent = `${root}→${mid}→${tip}`;
+    $("mCs").textContent = `sweep tip ${F(sweepMax,1)} mm | reflex ${F(tipReflex,2)} | droop ${F(dr,1)}°`;
+
+    let tableHtml = `<tr>
+      <th>%R</th><th>Raggio</th><th>β</th><th>Pitch in</th><th>Corda</th><th>Offset sweep</th><th>Droop</th><th>Camber</th><th>NACA</th><th>Spessore</th><th>Carico</th>
+    </tr>`;
+
+    rows.forEach(r => {
+      tableHtml += `<tr>
+        <td>${F(r.pct,1)}%</td><td>${F(r.r,2)}</td><td>${F(r.beta,2)}</td><td>${F(r.Pin,2)}</td><td>${F(r.ch,2)}</td><td>${F(r.swoff,2)}</td><td>${F(r.drl,2)}</td><td>${F(r.cam,2)}</td><td>${r.naca}</td><td>${F(r.thick*100,1)}%</td><td>${F(r.ln,3)}</td>
+      </tr>`;
+    });
+
+    $("tbl").innerHTML = tableHtml;
+
+    chart("cPitch", [{c:"#1f78ff", d:rows.map(r=>({x:r.pct,y:r.Pin}))}], {x0:0,x1:100,y0:0});
+    chart("cAngle", [{c:"#d94a4a", d:rows.map(r=>({x:r.pct,y:r.beta}))}], {x0:0,x1:100,y0:0});
+    chart("cChord", [{c:"#0f9fb7", d:rows.map(r=>({x:r.pct,y:r.ch}))}], {x0:0,x1:100,y0:0});
+    chart("cThick", [{c:"#f59f00", d:rows.map(r=>({x:r.pct,y:r.thick*100}))}], {x0:0,x1:100,y0:0});
+    chart("cShape", [
+      {c:"#1f78ff", d:rows.map(r=>({x:r.pct,y:sweepMax ? r.swoff/sweepMax : 0}))},
+      {c:"#d94a4a", d:rows.map(r=>({x:r.pct,y:r.cam}))},
+      {c:"#1f9d5a", d:rows.map(r=>({x:r.pct,y:r.drl/8}))}
+    ], {x0:0,x1:100,y0:-1});
+
+    const perf = [];
+    for(let i=1;i<=7;i++){
+      const t = i/7;
+      perf.push({x:current*Math.pow(t,1.75), y:thrust*Math.pow(t,1.35)});
+    }
+    chart("cPerf", [{c:"#7457d9", d:perf}], {x0:0,x1:current*1.15,y0:0});
+
+    $("rep").textContent =
+`Progressione profilo: NACA ${root} → ${mid} → ${tip}
+Pitch 75%R: ${F(P75,2)}"
+Solidity: ${F(solidity,3)}
+Sweep offset max: ${F(sweepMax,2)} mm
+Mozzo: ${$("HUBD").value} mm x ${$("HUBH").value} mm, foro ${$("SHAFTD").value} mm
+Rotazione: ${$("ROT").value}, multipala: ${$("MULTI").value}
+LE radius factor: ${$("LER").value}, TE sharpness: ${$("TES").value}, TE min: ${$("TEMIN").value} mm
+Corrente stimata: ${F(current,1)} A
+Spinta stimata: ${F(thrust/1000,2)} kgf`;
+
+    window.DSG = {rows,D,N,P75,sol:solidity,mc:meanChord,sw,sweepMax,ca,dr,I:current,T:thrust,lrpm:loadedRpm,norpm:noLoadRpm,root,mid,tip,tipref:tipReflex};
+  }catch(err){
+    console.error(err);
+    $("rep").textContent = "Errore JavaScript: " + err.message;
   }
-  return s;
+}
+
+function preset(type){
+  $("PROFILE").value = type;
+  if(type === "speed"){
+    $("AG").value=75; $("GR").value=45; $("EF").value=45; $("SM").value=55; $("ML").value=75;
+    $("ROOTP").value="4410"; $("MIDP").value="2309"; $("TIPP").value="0006"; $("TIPREFLEX").value="0,25";
+  }else if(type === "grip"){
+    $("AG").value=60; $("GR").value=85; $("EF").value=35; $("SM").value=55; $("ML").value=70;
+    $("ROOTP").value="4412"; $("MIDP").value="2412"; $("TIPP").value="2408"; $("TIPREFLEX").value="0,05";
+  }else{
+    $("AG").value=30; $("GR").value=35; $("EF").value=85; $("SM").value=60; $("ML").value=35;
+    $("ROOTP").value="4410"; $("MIDP").value="2410"; $("TIPP").value="0008"; $("TIPREFLEX").value="0,15";
+  }
+  $("agv").textContent = $("AG").value;
+  $("grv").textContent = $("GR").value;
+  $("efv").textContent = $("EF").value;
+  $("smv").textContent = $("SM").value;
+  $("mlv").textContent = $("ML").value;
+  gen();
+}
+
+function saveFile(text, filename){
+  const blob = new Blob([text], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),500);
 }
 
 function csvGeom(){
   if(!window.DSG) gen();
-  let c = "pct_radius,radius_mm,beta_deg,pitch_in,pitch_mm,chord_mm,sweep_factor,sweep_offset_mm,droop_deg,camber_factor,thickness_ratio,airfoil_family,naca_code,relative_load\n";
-  DSG.rows.forEach(r=>{
-    c += [
-      r.pct,
-      r.r,
-      r.beta,
-      r.Pin,
-      r.Pmm,
-      r.ch,
-      r.swl,
-      r.swoff,
-      r.drl,
-      r.cal,
-      r.thick,
-      escCSV(r.prof),
-      escCSV(DSG.nacaCode || ""),
-      r.ln
-    ].join(",") + "\n";
+  const d = window.DSG;
+
+  let meta =
+`#project_name,${$("PNAME").value}
+#blade_count,${num("N",3)}
+#rotation,${$("ROT").value}
+#generate_multiblade,${$("MULTI").value}
+#hub_diameter_mm,${num("HUBD",16)}
+#hub_height_mm,${num("HUBH",7)}
+#shaft_diameter_mm,${num("SHAFTD",5)}
+#root_fillet_mm,${num("FILLET",2)}
+#structural_thickness_factor,${num("STRUCT",1)}
+#leading_edge_radius_factor,${num("LER",.55)}
+#trailing_edge_sharpness,${num("TES",.75)}
+#trailing_edge_min_mm,${num("TEMIN",.25)}
+#auto_export_stl,${$("STL").value}
+`;
+
+  let csv = meta + "pct_radius,radius_mm,beta_deg,pitch_in,pitch_mm,chord_mm,sweep_offset_mm,droop_deg,camber_factor,naca_code,naca_m,naca_p,thickness_ratio,relative_load\n";
+  d.rows.forEach(r => {
+    csv += `${r.pct},${r.r},${r.beta},${r.Pin},${r.Pmm},${r.ch},${r.swoff},${r.drl},${r.cam},${r.naca},${r.m},${r.p},${r.thick},${r.ln}\n`;
   });
-  save(c,"progetto_elica_geometria.csv");
+  saveFile(csv, "progetto_elica_completo_rhino.csv");
 }
 
 function csvAnalisi(){
   if(!window.DSG) gen();
-  let d = DSG;
-  let c = "parameter,value\n";
-  const rows = [
-    ["diameter_in", d.D],
-    ["blade_count", d.N],
-    ["pitch75_in", d.P75],
-    ["solidity", d.sol],
-    ["mean_chord_mm", d.mc],
-    ["sweep_factor", d.sw],
-    ["sweep_max_offset_mm", d.sweepMax],
-    ["camber_factor", d.ca],
-    ["droop_deg", d.dr],
-    ["estimated_current_A", d.I],
-    ["estimated_thrust_gf", d.T],
-    ["loaded_rpm", d.lrpm],
-    ["no_load_rpm", d.norpm],
-    ["airfoil_family", d.airfoilName || d.afam || ""],
-    ["naca_code", d.nacaCode || ""]
-  ];
-  rows.forEach(row=> c += escCSV(row[0]) + "," + escCSV(row[1]) + "\n");
-  c += "\ncurrent_A,thrust_gf\n";
-  d.perf.forEach(p=> c += p.x + "," + p.y + "\n");
-  save(c,"progetto_elica_analisi.csv");
+  const d = window.DSG;
+  let csv = "parameter,value\n";
+  ["D","N","P75","sol","mc","sweepMax","ca","dr","I","T","lrpm","norpm","root","mid","tip","tipref"].forEach(k=>{
+    csv += `${k},${d[k]}\n`;
+  });
+  saveFile(csv, "progetto_elica_analisi.csv");
 }
 
 function copyTable(){
   if(!window.DSG) gen();
-  const text = DSG.rows.map(r =>
-    `${F(r.pct,1)}%, ${F(r.r,2)} mm, beta ${F(r.beta,2)}°, pitch ${F(r.Pin,2)}", corda ${F(r.ch,2)} mm, sweep ${F(r.swl,2)}, offset ${F(r.swoff,2)} mm, droop ${F(r.drl,2)}°, camber ${F(r.cal,2)}, thick ${F(r.thick*100,1)}%, profilo ${r.prof}`
-  ).join("\n");
-
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text);
-  } else {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand("copy");
-    document.body.removeChild(ta);
-  }
+  const text = window.DSG.rows.map(r => `${F(r.pct,1)}%, R ${F(r.r,2)} mm, beta ${F(r.beta,2)}°, NACA ${r.naca}, thick ${F(r.thick*100,1)}%`).join("\n");
+  navigator.clipboard.writeText(text);
 }
 
-addEventListener('load',gen)
+document.addEventListener("DOMContentLoaded", gen);
 </script>
-</body></html>
+</body>
+</html>

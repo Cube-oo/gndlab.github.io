@@ -20,7 +20,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .background-grid {
@@ -37,7 +37,7 @@
             position: relative;
             z-index: 2;
             text-align: center;
-            max-width: 900px;
+            max-width: 1200px;
             padding: 40px;
         }
 
@@ -122,16 +122,17 @@
     <div class="container">
         <h1>GND PROPELLER LAB</h1>
         <div class="subtitle">
-            FPV Propeller Design & Analysis Toolkit
+            FPV Propeller Design, Analysis & Rhino Tools
         </div>
 
         <div class="cards">
+
             <a href="propeller_design.html" class="card">
                 <div class="icon">🛠️</div>
                 <h2>Propeller Design</h2>
                 <p>
-                    Create and develop a propeller from scratch. 
-                    Define geometry, airfoil sections, pitch distribution and aerodynamic parameters.
+                    Design a propeller from scratch, define geometry, airfoil sections,
+                    pitch distribution and aerodynamic parameters.
                 </p>
             </a>
 
@@ -139,10 +140,20 @@
                 <div class="icon">📈</div>
                 <h2>Propeller Analysis</h2>
                 <p>
-                    Analyze existing propellers, compare aerodynamic performance, 
-                    inspect geometry and evaluate efficiency.
+                    Analyze existing FPV propellers, inspect geometry,
+                    compare aerodynamic performance and efficiency.
                 </p>
             </a>
+
+            <a href="rhino_propeller_section_generator_v3_profili.py" class="card" download>
+                <div class="icon">⬇️</div>
+                <h2>Rhino Plugin</h2>
+                <p>
+                    Download the Rhino Python plugin for automatic propeller section
+                    generation and profile creation.
+                </p>
+            </a>
+
         </div>
 
         <div class="footer">
